@@ -1,0 +1,7 @@
+{
+    "name": "sbd",
+    "description": "Skyblock Dungeon Mod",
+    "version": "0.0.1",
+    "author": "sbd",
+    "entry": "index.js"
+}

@@ -3,5 +3,8 @@
     "description": "Skyblock Dungeon Mod",
     "version": "0.0.1",
     "author": "sbd",
-    "entry": "index.js"
+    "entry": "index.js",
+    "requires": [
+        "requestV2"
+    ]
 }

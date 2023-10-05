@@ -21,9 +21,11 @@ register("chat", (score, rank) => {
 let partyMembers = []
 
 register("chat", (user) => {
-    partyMembers.push(user)
+    user = user.split(" ")
+    var lastElement = user[user.length - 1];
+    partyMembers.push(lastElement)
     ChatLib.chat(partyMembers.join(","))
-}).setChatCriteria("You have joined ${user} party!")
+}).setChatCriteria("You have joined ${user}'s party!")
 
 register("chat", (users) => {
     partyMembers.push(users)
@@ -36,6 +38,30 @@ register("chat", () => {
 }).setChatCriteria("You left the party.")
 
 register("chat", (user) => {
-    partyMembers = partyMembers.filter(x => x != user)
+    user = user.split(" ")
+    var lastElement = user[user.length - 1];
+    partyMembers.push(lastElement)
+    partyMembers = partyMembers.filter(x => x != lastElement)
     ChatLib.chat(partyMembers.join(","))
 }).setChatCriteria("${user} has left the party.")
+
+register("chat", (user) => {
+    partyMembers = []
+    ChatLib.chat(partyMembers.join(","))
+}).setChatCriteria("${user} has disbanded the party!")
+
+register("chat", (user) => {
+    partyMembers = []
+    ChatLib.chat(partyMembers.join(","))
+}).setChatCriteria("You have been kicked from the party by ${user}")
+
+register("chat", (user) => {
+    user = user.split(" ")
+    var lastElement = user[user.length - 1];
+    partyMembers.push(lastElement)
+    partyMembers = partyMembers.filter(x => x != user)
+    ChatLib.chat(partyMembers.join(","))
+}).setChatCriteria("${user} has been removed from the party.")
+
+
+

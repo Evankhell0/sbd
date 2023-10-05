@@ -1,6 +1,8 @@
 import request from "requestV2"
 import config from "./config.js"
 
+import { Data } from "./util/data.js"
+
 register("chat", () => {
     let playerData = request({url: `https://api.hypixel.net/player?key=${config.key}&uuid=${config.uuid}`, json: true}).then(data => {
         let secrets = data.player.achievements.skyblock_treasure_hunter
@@ -17,51 +19,3 @@ register("chat", (score, rank) => {
         })
     }
 }).setChatCriteria("Team Score: ${score} (${rank})").setContains()
-
-let partyMembers = []
-
-register("chat", (user) => {
-    user = user.split(" ")
-    var lastElement = user[user.length - 1];
-    partyMembers.push(lastElement)
-    ChatLib.chat(partyMembers.join(","))
-}).setChatCriteria("You have joined ${user}'s party!")
-
-register("chat", (users) => {
-    partyMembers.push(users)
-    ChatLib.chat(partyMembers.join(","))
-}).setChatCriteria("You'll be partying with: ${users}")
-
-register("chat", () => {
-    partyMembers = []
-    ChatLib.chat(partyMembers.join(","))
-}).setChatCriteria("You left the party.")
-
-register("chat", (user) => {
-    user = user.split(" ")
-    var lastElement = user[user.length - 1];
-    partyMembers.push(lastElement)
-    partyMembers = partyMembers.filter(x => x != lastElement)
-    ChatLib.chat(partyMembers.join(","))
-}).setChatCriteria("${user} has left the party.")
-
-register("chat", (user) => {
-    partyMembers = []
-    ChatLib.chat(partyMembers.join(","))
-}).setChatCriteria("${user} has disbanded the party!")
-
-register("chat", (user) => {
-    partyMembers = []
-    ChatLib.chat(partyMembers.join(","))
-}).setChatCriteria("You have been kicked from the party by ${user}")
-
-register("chat", (user) => {
-    user = user.split(" ")
-    var lastElement = user[user.length - 1];
-    partyMembers.push(lastElement)
-    partyMembers = partyMembers.filter(x => x != user)
-    ChatLib.chat(partyMembers.join(","))
-}).setChatCriteria("${user} has been removed from the party.")
-
-
-

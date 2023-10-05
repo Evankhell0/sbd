@@ -1,12 +1,7 @@
 import request from "requestV2"
-
-const config = {
-    "key": "apikey",
-    "uuid": "uuid"
-}
+import config from "./config.js"
 
 register("chat", () => {
-    ChatLib.chat("Entered Dungeon")
     let playerData = request({url: `https://api.hypixel.net/player?key=${config.key}&uuid=${config.uuid}`, json: true}).then(data => {
         let secrets = data.player.achievements.skyblock_treasure_hunter
         ChatLib.chat(`Starting secrets: ${secrets}`)
@@ -16,7 +11,10 @@ register("chat", () => {
 register("chat", (score, rank) => {
     let lastSlotItem = Player.getInventory().getStackInSlot(8)
     if(lastSlotItem?.getName()?.includes("Your Score Summary")) {
-        ChatLib.chat("Completed Dungeon")
+        let playerData = request({url: `https://api.hypixel.net/player?key=${config.key}&uuid=${config.uuid}`, json: true}).then(data => {
+            let secrets = data.player.achievements.skyblock_treasure_hunter
+            ChatLib.chat(`Ending secrets: ${secrets}`)
+        })
     }
 }).setChatCriteria("Team Score: ${score} (${rank})").setContains()
 
@@ -38,6 +36,6 @@ register("chat", () => {
 }).setChatCriteria("You left the party.")
 
 register("chat", (user) => {
-    partyMembers =  partyMembers.filter(x => x != user)
+    partyMembers = partyMembers.filter(x => x != user)
     ChatLib.chat(partyMembers.join(","))
 }).setChatCriteria("${user} has left the party.")

@@ -1,28 +1,33 @@
+import { PartyMember } from "./partymember.js"
+
 class Party {
+    //TODO always add yourself to the party
     constructor() {
         this.partyMembers = []
-        ChatLib.chat("called party constructor")
         this.registerTriggers()
     }
 
     addPartyMember(user) {
         user = user.split(" ")
         let lastElement = user[user.length - 1]
-        this.partyMembers.push(lastElement)
-
-        ChatLib.chat(this.partyMembers.join(", "))
+        this.partyMembers.push(new PartyMember(lastElement))
+        ChatLib.chat(this.getNames())
     }
 
     clearParty() {
         this.partyMembers = []
-        ChatLib.chat(this.partyMembers.join(", "))
+        ChatLib.chat(this.getNames())
     }
 
     removePartyMember(user) {
         user = user.split(" ")
         let lastElement = user[user.length - 1];
-        this.partyMembers = this.partyMembers.filter(x => x != lastElement)
-        ChatLib.chat(this.partyMembers.join(", "))
+        this.partyMembers = this.partyMembers.filter(member => member.name != lastElement)
+        ChatLib.chat(this.getNames())
+    }
+
+    getNames() {
+        return this.partyMembers.map(member => member.name).join(", ")
     }
 
     registerTriggers() {

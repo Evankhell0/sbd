@@ -1,9 +1,8 @@
 import { PartyMember } from "./partymember.js"
 
 class Party {
-    //TODO always add yourself to the party
     constructor() {
-        this.partyMembers = []
+        this.partyMembers = [new PartyMember(Player.getName())]
         this.registerTriggers()
     }
 
@@ -15,7 +14,7 @@ class Party {
     }
 
     clearParty() {
-        this.partyMembers = []
+        this.partyMembers = [new PartyMember(Player.getName())]
         ChatLib.chat(this.getNames())
     }
 

@@ -57,6 +57,10 @@ class Party {
         register("chat", (user) => {
             this.removePartyMember(user)
         }).setChatCriteria("${user} has been removed from the party.")
+
+        register("chat", (user) => {
+            this.addPartyMember(user)
+        }).setChatCriteria("Party Finder > ${user} joined the dungeon group! (${class} Level ${level})")
     }
 }
 

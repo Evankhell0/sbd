@@ -17,6 +17,14 @@ const registerDebugTriggers = () => {
     register("command", (id) => {
         ChatLib.chat(Data.party.getNames())
     }).setName("py")
+
+    register("command", (name) => {
+        Data.party.addPartyMember(name)
+    }).setName("add")
+
+    register("command", (name) => {
+        Data.party.removePartyMember(name)
+    }).setName("remove")
 }
 
 main()

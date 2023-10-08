@@ -10,10 +10,10 @@ const registerDungeonTriggers = () => {
     register("chat", (score, rank) => {
         let lastSlotItem = Player.getInventory().getStackInSlot(8)
         let lastSlotItemName = lastSlotItem?.getName()
-        if(!lastSlotItemName.includes("Your Score Summary")) {
+        /*if(!lastSlotItemName.includes("Your Score Summary")) {
             console.log("[SBD] called Dungeon End while not being in dungeon")
             return;
-        }
+        }*/
         Data.party.partyMembers.forEach(member => {
             member.updateSecrets().then(difference => {
                 ChatLib.chat(`${member.name}: ${difference} secrets gained`)

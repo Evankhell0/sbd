@@ -1,9 +1,11 @@
 import { Data } from "./util/data.js"
 import { registerDungeonTriggers } from "./util/dungeonstats.js"
+import { registerPartyFinderTriggers } from "./util/partyfinder.js"
 
 const main = () => {
     //registerDungeonTriggers()
     //registerDebugTriggers()
+    registerPartyFinderTriggers()
 }
 
 const registerDebugTriggers = () => {

@@ -13,7 +13,7 @@ const registerPartyFinderTriggers = () => {
             if(/§f\[§a\w+§f\]§r/.test(x)) {
                 const name = x.replace(/(.*§5§o §\w)|(§f: §\w\w+§b \(§e\d+§b\).*)/g, "")
                 const player = Data.players[name]
-                if(player?.uuid.new != player?.uuid.old || player?.secrets.new != player?.secrets.old) {
+                if(player?.secrets.new != player?.secrets.old) {
                     hasChanged = true;
                 }
                 const noSuffix = x.replace(/ §f\[§a\w+§f\]§r/, "")

@@ -3,7 +3,13 @@ import { Data } from "./data.js"
 const registerDungeonTriggers = () => {
     register("chat", () => {
         Data.party.partyMembers.forEach(member => {
-            member.updateSecrets();
+            member.updateSecrets()
+        })
+        let tabList = TabList.getNames()
+        tabList.forEach(line => {
+            let matches = line.match(/(?<=\§\w)(?<!\(\§\w\§\w)\w+(?=\s)/)
+            if(matches.length)
+               console.log(matches[0])
         })
     }).setChatCriteria("You are not allowed to use Potion Effects while in Dungeon, therefore all active effects have been paused and stored. They will be restored when you leave Dungeon!")
 

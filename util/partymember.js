@@ -6,8 +6,8 @@ class PartyMember {
         this.name = name
         this.uuid = null
         this.secrets = {
-            old: 0,
-            new: 0
+            old: "?",
+            new: "?"
         }
         this.setUUID(name)
     }

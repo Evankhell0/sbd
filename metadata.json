@@ -5,6 +5,7 @@
     "author": "sbd",
     "entry": "index.js",
     "requires": [
-        "requestV2"
+        "requestV2",
+        "Vigilance"
     ]
 }

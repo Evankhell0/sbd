@@ -7,14 +7,8 @@ class PartyMember {
     constructor(name) {
         this.name = name
         this.uuid = null
-        this.secrets = "?"
-        this.runs = "?"
-        this.average = "?"
-        this.catalevel = "?"
         this.pb = {
-            catacombs: {
-                "7": "?"
-            },
+            catacombs: {},
             master_catacombs: {}
         }
         this.setUUID(name)
@@ -31,6 +25,7 @@ class PartyMember {
     updateSecrets() {
         request({url: `https://api.hypixel.net/player?key=${config.key}&uuid=${this.uuid}`, json: true}).then(data => {
             this.secrets = data.player.achievements.skyblock_treasure_hunter
+            this.updateSecretAverage()
             this.changed = true
         }).catch(e => console.log(`[SBD] Could not update Secrets for ${this.name}: ${e}`))
     }
@@ -39,14 +34,38 @@ class PartyMember {
         request({url: `https://api.hypixel.net/v2/skyblock/profiles?key=${config.key}&uuid=${this.uuid}`, json: true}).then(data => {
             const profile = data.profiles.find(x => x.selected)
 
-            const fastest_f7 = profile["members"][this.uuid]["dungeons"]["dungeon_types"]["catacombs"]["fastest_time_s_plus"]["7"]
-            this.pb.catacombs["7"] = timeToString(fastest_f7)
+            /*for(let i = 1; i <= 7; i++) {
+                try {
+                    const pb = profile["members"][this.uuid]["dungeons"]["dungeon_types"]["catacombs"]["fastest_time_s_plus"][i]
+                    this.pb.catacombs[i] = timeToString(pb)
+
+                    const masterpb = profile["members"][this.uuid]["dungeons"]["dungeon_types"]["master_catacombs"]["fastest_time_s_plus"][i]
+                    this.pb.master_catacombs[i] = timeToString(masterpb)
+                } catch (error) {
+
+                }
+            }*/
+
+            const pb = profile["members"][this.uuid]["dungeons"]["dungeon_types"]["catacombs"]["fastest_time_s_plus"]["7"]
+            this.pb.catacombs["7"] = timeToString(pb)
 
             const cataxp = profile["members"][this.uuid]["dungeons"]["dungeon_types"]["catacombs"]["experience"]
             this.catalevel = xpToCataLevel(cataxp)
 
+            const totalRuns = Object.values(profile["members"][this.uuid]["dungeons"]["dungeon_types"]).map(dungeon => {
+                return Object.values(dungeon["tier_completions"]).reduce((a, b) => a + b, 0)
+            }).reduce((a, b) => a + b, 0)
+            this.runs = totalRuns
+
+            this.updateSecretAverage()
             this.changed = true
         }).catch(e => console.log(`[SBD] Could not get Skyblock Profile for ${this.name}: ${e}`))
+    }
+
+    updateSecretAverage() {
+        if(this.secrets && this.runs) {
+            this.secretAverage = (parseInt(this.secrets) / this.runs).toFixed(1)
+        }
     }
 
     hasChanged() {

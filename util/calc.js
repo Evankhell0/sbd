@@ -1,3 +1,12 @@
+const romanToNumber = (roman) => {
+    if(!roman) {
+        return 0
+    }
+    // only works up to VII for now
+    const numerals = ["E", "I", "II", "III", "IV", "V", "VI", "VII"]
+    return numerals.indexOf(roman)
+}
+
 const timeToString = (timeMilliseconds) => {
     if(!timeMilliseconds) {
         return "No S+"
@@ -72,4 +81,4 @@ const CATA_XP_REQUIREMENTS = [
     116250000
 ]
 
-module.exports = { timeToString, xpToCataLevel }
+module.exports = { romanToNumber, timeToString, xpToCataLevel }

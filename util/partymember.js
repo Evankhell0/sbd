@@ -53,7 +53,7 @@ class PartyMember {
             this.catalevel = xpToCataLevel(cataxp)
 
             const totalRuns = Object.values(profile["members"][this.uuid]["dungeons"]["dungeon_types"]).map(dungeon => {
-                return Object.values(dungeon["tier_completions"]).reduce((a, b) => a + b, 0)
+                return Object.values(dungeon["tier_completions"]).slice(0, -1).reduce((a, b) => a + b, 0)
             }).reduce((a, b) => a + b, 0)
             this.runs = totalRuns
 

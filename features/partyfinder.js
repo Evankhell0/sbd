@@ -1,11 +1,15 @@
 import request from "requestV2"
 
+import Config from "../Config.js"
 import { Data } from "../util/data.js"
 import { romanToNumber } from "../util/calc.js"
 import { PartyMember } from "../util/partymember.js"
 
 const registerPartyFinderTriggers = () => {
     register("itemTooltip", (lore, item) => {
+        if(!Config.partyfinder) {
+            return
+        }
         const itemName = lore[0]
         lore = lore.slice(1)
         lore = lore.filter(x => !/minecraft:/.test(x) && !/NBT:/.test(x))

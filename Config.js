@@ -1,5 +1,5 @@
-import { Data } from "./util/data.js"
-import { setApiKey } from "./util/updateconfig.js"
+import { Data } from "./util/data.js";
+import { setApiKey } from "./util/updateconfig.js";
 
 import {
     @ButtonProperty,
@@ -43,7 +43,7 @@ class Config {
             if(!key || key == Data.key) {
                 return;
             }
-            setApiKey(key)
+            setApiKey(key);
         });
     }
 }

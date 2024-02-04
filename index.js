@@ -1,15 +1,15 @@
 import { Data } from "./util/data.js"
+import Config from "./Config.js"
+import { setApiKey } from "./util/updateconfig.js"
 import { registerPartyFinderTriggers } from "./features/partyfinder.js"
 import { sbdCommand } from "./commands/sbdcommand.js"
 
 const main = () => {
     registerPartyFinderTriggers()
-    console.log(Data.key)
+
     register("chat", (apikey) => {
-        const config = {
-            key: apikey
-        }
-        FileLib.write("sbd", "/db/config.json", JSON.stringify(config))
+        setApiKey(apikey)
+        Config.apikey = apikey
     }).setChatCriteria("Your new API key is ${apikey}").setContains()
 }
 

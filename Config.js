@@ -1,5 +1,4 @@
 import { Data } from "./util/data.js";
-import { setApiKey } from "./util/updateconfig.js";
 
 import {
     @ButtonProperty,
@@ -27,7 +26,7 @@ class Config {
         category: 'Config',
         protected: true,
     })
-    apikey = Data.key;
+    apikey = "";
 
     @SwitchProperty({
         name: 'Party Finder Stats',
@@ -39,12 +38,6 @@ class Config {
 
     constructor() {
         this.initialize(this);
-        this.registerListener('API Key', (key) => {
-            if(!key || key == Data.key) {
-                return;
-            }
-            setApiKey(key);
-        });
     }
 }
 

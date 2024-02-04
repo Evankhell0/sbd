@@ -1,7 +1,8 @@
 import request from "requestV2"
-import { Data } from "./data.js"
 
-import { romanToNumber } from "./calc.js"
+import { Data } from "../util/data.js"
+import { romanToNumber } from "../util/calc.js"
+import { PartyMember } from "../util/partymember.js"
 
 const registerPartyFinderTriggers = () => {
     register("itemTooltip", (lore, item) => {
@@ -33,7 +34,7 @@ const registerPartyFinderTriggers = () => {
                 const name = x.replace(/(.*§5§o §\w)|(§f: §\w\w+§b \(§e\d+§b\).*)/g, "")
                 let player = Data.players[name]
                 if(!player) {
-                    Data.addPlayer(name)
+                    Data.players[name] = new PartyMember(name)
                     player = Data.players[name]
                 } else if(player.uuid == null) {
                     player.setUUID(name)

@@ -1,13 +1,15 @@
-import { Party } from "./party.js"
-import { PartyMember } from "./partymember.js"
+const readConfig = (property) => {
+    if(!FileLib.exists("sbd", "db/config.json")) {
+        return ""
+    }
+    const data = FileLib.read("sbd", "db/config.json")
+    const config = JSON.parse(data)
+    return config[property]
+}
 
 class Data {
-    //static party = new Party()
     static players = {}
-
-    static addPlayer(name) {
-        this.players[name] = new PartyMember(name)
-    }
+    static key = readConfig("key")
 }
 
 module.exports = { Data }

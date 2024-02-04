@@ -1,7 +1,7 @@
-import config from "../db/config.js"
 import request from "requestV2"
 
-import { timeToString, xpToCataLevel } from "./calc.js"
+import { Data } from "../util/data.js"
+import { timeToString, xpToCataLevel } from "../util/calc.js"
 
 class PartyMember {
     constructor(name) {
@@ -23,7 +23,7 @@ class PartyMember {
     }
 
     updateSecrets() {
-        request({url: `https://api.hypixel.net/player?key=${config.key}&uuid=${this.uuid}`, json: true}).then(data => {
+        request({url: `https://api.hypixel.net/player?key=${Data.key}&uuid=${this.uuid}`, json: true}).then(data => {
             this.secrets = data.player.achievements.skyblock_treasure_hunter
             this.updateSecretAverage()
             this.changed = true
@@ -31,7 +31,7 @@ class PartyMember {
     }
 
     updateDungeonStats() {
-        request({url: `https://api.hypixel.net/v2/skyblock/profiles?key=${config.key}&uuid=${this.uuid}`, json: true}).then(data => {
+        request({url: `https://api.hypixel.net/v2/skyblock/profiles?key=${Data.key}&uuid=${this.uuid}`, json: true}).then(data => {
             const profile = data.profiles.find(x => x.selected)
 
             /*for(let i = 1; i <= 7; i++) {

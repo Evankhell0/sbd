@@ -1,8 +1,8 @@
 import request from "requestV2"
+import { decodeNumeral } from "BloomCore/utils/Utils"
 
 import Config from "../Config.js"
 import { Data } from "../util/data.js"
-import { romanToNumber } from "../util/calc.js"
 import { PartyMember } from "../util/partymember.js"
 
 const registerPartyFinderTriggers = () => {
@@ -18,7 +18,7 @@ const registerPartyFinderTriggers = () => {
         const floorLine = lore.find(x => /§7Floor: §bFloor /.test(x))
         if(floorLine) {
             const split = floorLine.split(" ")
-            floor = romanToNumber(split[split.length - 1])
+            floor = decodeNumeral(split[split.length - 1])
         }
 
         let hasChanged = false

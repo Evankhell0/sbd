@@ -1,7 +1,8 @@
 import request from "requestV2"
+import { calcSkillLevel } from "BloomCore/utils/Utils"
 
 import Config from "../Config.js"
-import { timeToString, xpToCataLevel } from "../util/calc.js"
+import { timeToString } from "../util/calc.js"
 
 class PartyMember {
     constructor(name) {
@@ -50,7 +51,7 @@ class PartyMember {
             this.pb.catacombs["7"] = timeToString(pb)
 
             const cataxp = profile["members"][this.uuid]["dungeons"]["dungeon_types"]["catacombs"]["experience"]
-            this.catalevel = xpToCataLevel(cataxp)
+            this.catalevel = calcSkillLevel("catacombs", cataxp).toFixed(0)
 
             const totalRuns = Object.values(profile["members"][this.uuid]["dungeons"]["dungeon_types"]).map(dungeon => {
                 return Object.values(dungeon["tier_completions"]).slice(0, -1).reduce((a, b) => a + b, 0)

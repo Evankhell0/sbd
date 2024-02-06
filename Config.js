@@ -12,13 +12,7 @@ import {
     @Vigilant,
 } from '../Vigilance/index.js';
 
-// The only parameter that is required is the first, which should be the Module name.
-// The other 2 parameters are optional.
-// The 2nd parameter is the title of the settings window, seen in the top left above the
-// category list.
-// The 3rd parameter is an object that determines the sorting order of the categories.
 @Vigilant('sbd', 'SBD Settings')
-
 class Config {
     @TextProperty({
         name: 'API Key',
@@ -37,45 +31,43 @@ class Config {
     partyfinder = false;
 
     @SwitchProperty({
-        name: 'Show Total Secrets',
-        description: 'Shows stats of players in Party Finder.',
+        name: 'Show cata level',
+        description: 'Shows the player\'s catacombs level in party finder.',
         category: 'Dungeons',
         subcategory: 'Party Finder',
     })
-    partyfinderSecrets = false;
+    partyfinderCata = true;
 
     @SwitchProperty({
-        name: 'Show Secret Average',
-        description: 'Shows stats of players in Party Finder.',
+        name: 'Show total secrets',
+        description: 'Shows the player\'s total amount of secrets in party finder.',
         category: 'Dungeons',
         subcategory: 'Party Finder',
     })
-    partyfinderSecretsAvg = false;
+    partyfinderSecrets = true;
+
+    @SwitchProperty({
+        name: 'Show secret average',
+        description: 'Shows the player\'s secret average in party finder.',
+        category: 'Dungeons',
+        subcategory: 'Party Finder',
+    })
+    partyfinderSecretAverage = true;
 
     @SwitchProperty({
         name: 'Show F7 PB',
-        description: 'Shows stats of players in Party Finder.',
+        description: 'Shows the player\'s fastest S+ time in floor 7 in party finder.',
         category: 'Dungeons',
         subcategory: 'Party Finder',
     })
-    partyfinderF7PB = false;
-
-    @SwitchProperty({
-        name: 'Show Cata',
-        description: 'Shows stats of players in Party Finder.',
-        category: 'Dungeons',
-        subcategory: 'Party Finder',
-    })
-    partyfinderCata = false;
+    partyfinderF7PB = true;
 
     constructor() {
         this.initialize(this);
-        this.addDependency("Show Total Secrets","Party Finder Stats")
-        this.addDependency("Show Secret Average","Party Finder Stats")
-        this.addDependency("Show F7 PB","Party Finder Stats")
-        this.addDependency("Show Secret Average","Party Finder Stats")
-        this.addDependency("Show Cata","Party Finder Stats")
-
+        this.addDependency("Show total secrets", "Party Finder Stats")
+        this.addDependency("Show cata level", "Party Finder Stats")
+        this.addDependency("Show secret average", "Party Finder Stats")
+        this.addDependency("Show F7 PB", "Party Finder Stats")
     }
 }
 

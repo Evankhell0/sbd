@@ -40,7 +40,7 @@ const registerPartyFinderTriggers = () => {
             if(player.uuid == null) {
                 player.setUUID(username)
             }
-            
+
             hasChanged = true
             return createSuffix(x, player, floor)
         })
@@ -55,16 +55,30 @@ const hasSuffix = (msg) => {
 }
 
 const removeSuffix = (msg) => {
-    return msg.replace(/ §0§r§r.*/, "")
+    return msg.replace(/§0§r§r.*/, "")
 }
 
 const createSuffix = (msg, player, floor) => {
     if(!player) {
         return msg
     }
-    let suffix = " §0§r§r"
-    // TD, only add enabled features
-    suffix += `§b(§6${player.catalevel ?? "?"}§b) §8[§a${player.secrets ?? "?"}§8/§b${player.secretAverage ?? "?"}§8] §8[§9${player.pb.catacombs["7"] ?? "?"}§8]§r`
+    let suffix = "§0§r§r"
+    if(Config.partyfinderCata) {
+        suffix += ` §b(§6${player.catalevel ?? "?"}§b)§r`
+    }
+    if(Config.partyfinderSecrets && Config.partyfinderSecretAverage) {
+        suffix += ` §8[§a${player.secrets ?? "?"}§8/§b${player.secretAverage ?? "?"}§8]§r`
+    } else {
+        if(Config.partyfinderSecrets) {
+            suffix += ` §8[§a${player.secrets ?? "?"}§8]§r`
+        }
+        if(Config.partyfinderSecretAverage) {
+            suffix += ` §8[§b${player.secretAverage ?? "?"}§8]§r`
+        }
+    }
+    if(Config.partyfinderF7PB) {
+        suffix += ` §8[§9${player.pb.catacombs["7"] ?? "?"}§8]§r`
+    }
     return `${removeSuffix(msg)}${suffix}`
 }
 

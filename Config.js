@@ -53,12 +53,12 @@ class Config {
     partyfinderSecretsAvg = false;
 
     @SwitchProperty({
-        name: 'Show F7 BP',
+        name: 'Show F7 PB',
         description: 'Shows stats of players in Party Finder.',
         category: 'Dungeons',
         subcategory: 'Party Finder',
     })
-    partyfinderF7BP = false;
+    partyfinderF7PB = false;
 
     @SwitchProperty({
         name: 'Show Cata',
@@ -72,7 +72,7 @@ class Config {
         this.initialize(this);
         this.addDependency("Show Total Secrets","Party Finder Stats")
         this.addDependency("Show Secret Average","Party Finder Stats")
-        this.addDependency("Show F7 BP","Party Finder Stats")
+        this.addDependency("Show F7 PB","Party Finder Stats")
         this.addDependency("Show Secret Average","Party Finder Stats")
         this.addDependency("Show Cata","Party Finder Stats")
 

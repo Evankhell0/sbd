@@ -23,31 +23,26 @@ const registerPartyFinderTriggers = () => {
 
         let hasChanged = false
         lore = lore.map(x => {
-
-            if(/§b\(§6[\w\?]+§b\)/.test(x)) {
-                const name = x.replace(/(.*§5§o §\w)|(§f: §\w\w+§b \(§e\d+§b\).*)/g, "")
-                const player = Data.players[name]
-                if(player?.hasChanged()) {
-                    hasChanged = true
-                }
-                const noSuffix = x.replace(/ §b\(§6.*/, "")
-                return createSuffix(noSuffix, player, floor)
+            if(!/§5§o §\w\w+§f: §\w\w+§b/.test(x)) {
+                return x.replace(/§5§o/, "")
             }
 
-            if(/§5§o §\w\w+§f: §\w\w+§b \(§e\d+§b\)/.test(x)) {
-                const name = x.replace(/(.*§5§o §\w)|(§f: §\w\w+§b \(§e\d+§b\).*)/g, "")
-                let player = Data.players[name]
-                if(!player) {
-                    Data.players[name] = new PartyMember(name)
-                    player = Data.players[name]
-                } else if(player.uuid == null) {
-                    player.setUUID(name)
-                }
-                hasChanged = true
-                return createSuffix(x, player, floor)
+            const username = x.replace(/(.*§5§o §\w)|(§f: §\w\w+§b \(§e\d+§b\).*)/g, "")
+            if(!Data.players[username]) {
+                Data.players[username] = new PartyMember(username)
+            }
+            const player = Data.players[username]
+
+            if(hasSuffix(x) && !player.hasChanged()) {
+                return x
             }
 
-            return x.replace(/§5§o/,"")
+            if(player.uuid == null) {
+                player.setUUID(username)
+            }
+            
+            hasChanged = true
+            return createSuffix(x, player, floor)
         })
         if(hasChanged) {
             item.setLore(lore)
@@ -55,11 +50,22 @@ const registerPartyFinderTriggers = () => {
     });
 }
 
+const hasSuffix = (msg) => {
+    return /§0§r§r/.test(msg)
+}
+
+const removeSuffix = (msg) => {
+    return msg.replace(/ §0§r§r.*/, "")
+}
+
 const createSuffix = (msg, player, floor) => {
     if(!player) {
         return msg
     }
-    return `${msg} §b(§6${player.catalevel ?? "?"}§b) §8[§a${player.secrets ?? "?"}§8/§b${player.secretAverage ?? "?"}§8] §8[§9${player.pb.catacombs["7"] ?? "?"}§8]§r`
+    let suffix = " §0§r§r"
+    // TD, only add enabled features
+    suffix += `§b(§6${player.catalevel ?? "?"}§b) §8[§a${player.secrets ?? "?"}§8/§b${player.secretAverage ?? "?"}§8] §8[§9${player.pb.catacombs["7"] ?? "?"}§8]§r`
+    return `${removeSuffix(msg)}${suffix}`
 }
 
 module.exports = { registerPartyFinderTriggers }

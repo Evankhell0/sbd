@@ -34,10 +34,48 @@ class Config {
         category: 'Dungeons',
         subcategory: 'Party Finder',
     })
-    partyfinder = true;
+    partyfinder = false;
+
+    @SwitchProperty({
+        name: 'Show Total Secrets',
+        description: 'Shows stats of players in Party Finder.',
+        category: 'Dungeons',
+        subcategory: 'Party Finder',
+    })
+    partyfinderSecrets = false;
+
+    @SwitchProperty({
+        name: 'Show Secret Average',
+        description: 'Shows stats of players in Party Finder.',
+        category: 'Dungeons',
+        subcategory: 'Party Finder',
+    })
+    partyfinderSecretsAvg = false;
+
+    @SwitchProperty({
+        name: 'Show F7 PB',
+        description: 'Shows stats of players in Party Finder.',
+        category: 'Dungeons',
+        subcategory: 'Party Finder',
+    })
+    partyfinderF7PB = false;
+
+    @SwitchProperty({
+        name: 'Show Cata',
+        description: 'Shows stats of players in Party Finder.',
+        category: 'Dungeons',
+        subcategory: 'Party Finder',
+    })
+    partyfinderCata = false;
 
     constructor() {
         this.initialize(this);
+        this.addDependency("Show Total Secrets","Party Finder Stats")
+        this.addDependency("Show Secret Average","Party Finder Stats")
+        this.addDependency("Show F7 PB","Party Finder Stats")
+        this.addDependency("Show Secret Average","Party Finder Stats")
+        this.addDependency("Show Cata","Party Finder Stats")
+
     }
 }
 

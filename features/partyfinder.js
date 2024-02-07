@@ -14,14 +14,10 @@ const registerPartyFinderTriggers = () => {
         lore = lore.slice(1)
         lore = lore.filter(x => !/minecraft:/.test(x) && !/NBT:/.test(x))
 
-        let floor = 0
-        const floorLine = lore.find(x => /§7Floor: §bFloor /.test(x))
-        if(floorLine) {
-            const split = floorLine.split(" ")
-            floor = decodeNumeral(split[split.length - 1])
-        }
-
+        const floor = getFloor(lore)
+        const dungeonType = getDungeonType(lore)
         let hasChanged = false
+
         lore = lore.map(x => {
             if(!/§5§o §\w\w+§f: §\w\w+§b/.test(x)) {
                 return x.replace(/§5§o/, "")
@@ -42,7 +38,7 @@ const registerPartyFinderTriggers = () => {
             }
 
             hasChanged = true
-            return createSuffix(x, player, floor)
+            return createSuffix(x, player, floor, dungeonType)
         })
         if(hasChanged) {
             item.setLore(lore)
@@ -58,7 +54,7 @@ const removeSuffix = (msg) => {
     return msg.replace(/§0§r§r.*/, "")
 }
 
-const createSuffix = (msg, player, floor) => {
+const createSuffix = (msg, player, floor, dungeonType) => {
     if(!player) {
         return msg
     }
@@ -77,9 +73,26 @@ const createSuffix = (msg, player, floor) => {
         }
     }
     if(Config.partyfinderF7PB) {
-        suffix += ` §8[§9${player.pb.catacombs["7"] ?? "?"}§8]§r`
+        suffix += ` §8[§9${player.pb[dungeonType][floor]?.["S+"] ?? "?"}§8]§r`
     }
     return `${removeSuffix(msg)}${suffix}`
+}
+
+const getFloor = (lore) => {
+    const floorLine = lore.find(x => /§7Floor: §bFloor /.test(x))
+    if(floorLine) {
+        const split = floorLine.split(" ")
+        floor = decodeNumeral(split[split.length - 1])
+        return floor
+    }
+    return 0
+}
+
+const getDungeonType = (lore) => {
+    if(lore.some(x => /§5§o§7Dungeon: §bMaster Mode Catacombs/.test(x))) {
+        return "master_catacombs"
+    }
+    return "catacombs"
 }
 
 module.exports = { registerPartyFinderTriggers }

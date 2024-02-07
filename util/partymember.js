@@ -35,25 +35,15 @@ class PartyMember {
         request({url: `https://api.hypixel.net/v2/skyblock/profiles?key=${Config.apikey}&uuid=${this.uuid}`, json: true}).then(data => {
             const profile = data.profiles.find(x => x.selected)
 
-            /*for(let i = 1; i <= 7; i++) {
-                try {
-                    const pb = profile["members"][this.uuid]["dungeons"]["dungeon_types"]["catacombs"]["fastest_time_s_plus"][i]
-                    this.pb.catacombs[i] = timeToString(pb)
+            for(let i = 1; i <= 7; i++) {
+                this.pb.catacombs[i] = this.getFloorPB(profile, this.uuid, "catacombs", i)
+                this.pb.master_catacombs[i] = this.getFloorPB(profile, this.uuid, "master_catacombs", i)
+            }
 
-                    const masterpb = profile["members"][this.uuid]["dungeons"]["dungeon_types"]["master_catacombs"]["fastest_time_s_plus"][i]
-                    this.pb.master_catacombs[i] = timeToString(masterpb)
-                } catch (error) {
+            const cataXP = profile["members"][this.uuid]["dungeons"]?.["dungeon_types"]?.["catacombs"]?.["experience"]
+            this.catalevel = calcSkillLevel("catacombs", cataXP).toFixed(0)
 
-                }
-            }*/
-
-            const pb = profile["members"][this.uuid]["dungeons"]["dungeon_types"]["catacombs"]["fastest_time_s_plus"]["7"]
-            this.pb.catacombs["7"] = timeToString(pb)
-
-            const cataxp = profile["members"][this.uuid]["dungeons"]["dungeon_types"]["catacombs"]["experience"]
-            this.catalevel = calcSkillLevel("catacombs", cataxp).toFixed(0)
-
-            const totalRuns = Object.values(profile["members"][this.uuid]["dungeons"]["dungeon_types"]).map(dungeon => {
+            const totalRuns = Object.values(profile["members"][this.uuid]?.["dungeons"]?.["dungeon_types"] ?? {}).map(dungeon => {
                 return Object.values(dungeon["tier_completions"]).slice(0, -1).reduce((a, b) => a + b, 0)
             }).reduce((a, b) => a + b, 0)
             this.runs = totalRuns
@@ -61,6 +51,20 @@ class PartyMember {
             this.updateSecretAverage()
             this.changed = true
         }).catch(e => console.log(`[SBD] Could not get Skyblock Profile for ${this.name}: ${e}`))
+    }
+
+    getFloorPB(profile, uuid, type, floor) {
+        let timeS = null
+        let timeSPlus = null
+        try {
+            timeS = profile["members"][uuid]["dungeons"]["dungeon_types"][type]["fastest_time_s"][floor],
+            timeSPlus = profile["members"][uuid]["dungeons"]["dungeon_types"][type]["fastest_time_s_plus"][floor]
+        } catch(e) { }
+        const pb = {
+            "S": timeToString(timeS),
+            "S+": timeToString(timeSPlus)
+        }
+        return pb
     }
 
     updateSecretAverage() {

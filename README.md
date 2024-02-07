@@ -10,7 +10,7 @@ Run the command `/ct import sbd` ingame. Requires ChatTriggers to be installed.
 <details>
 <summary>Party Finder Stats Overlay</summary>
 
-* Shows stats of players in party finder. Includes cata level, secrets, secret average, and F7 PB.
+* Shows stats of players in party finder. Includes cata level, secrets, secret average, and S+ PB.
 </details>
 
     

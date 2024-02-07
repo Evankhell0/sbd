@@ -23,13 +23,13 @@ const registerPartyFinderTriggers = () => {
                 return x.replace(/§5§o/, "")
             }
 
-            const username = x.replace(/(.*§5§o §\w)|(§f: §\w\w+§b \(§e\d+§b\).*)/g, "")
+            const username = getUsername(x)
             if(!Data.players[username]) {
                 Data.players[username] = new PartyMember(username)
             }
             const player = Data.players[username]
 
-            if(hasSuffix(x) && !player.hasChanged()) {
+            if(hasCustomSuffix(x) && !player.hasChanged()) {
                 return x
             }
 
@@ -46,12 +46,12 @@ const registerPartyFinderTriggers = () => {
     });
 }
 
-const hasSuffix = (msg) => {
+const hasCustomSuffix = (msg) => {
     return /§0§r§r/.test(msg)
 }
 
 const removeSuffix = (msg) => {
-    return msg.replace(/§0§r§r.*/, "")
+    return msg.replace(/ \(§e\d+§b\)|§0§r§r.*/, "")
 }
 
 const createSuffix = (msg, player, floor, dungeonType) => {
@@ -59,8 +59,15 @@ const createSuffix = (msg, player, floor, dungeonType) => {
         return msg
     }
     let suffix = "§0§r§r"
+    if(Config.partyfinderClassLevel) {
+        suffix += ` §b(§e${getClassLevel(msg) ?? "?"}§b)§r`
+    }
     if(Config.partyfinderCata) {
-        suffix += ` §b(§6${player.catalevel ?? "?"}§b)§r`
+        if(!Config.partyfinderClassLevel && !player.catalevel) {
+            suffix += ` §b(§e${getClassLevel(msg) ?? "?"}§b)§r`
+        } else {
+            suffix += ` §b(§6${player.catalevel ?? "?"}§b)§r`
+        }
     }
     if(Config.partyfinderSecrets && Config.partyfinderSecretAverage) {
         suffix += ` §8[§a${player.secrets ?? "?"}§8/§b${player.secretAverage ?? "?"}§8]§r`
@@ -93,6 +100,14 @@ const getDungeonType = (lore) => {
         return "master_catacombs"
     }
     return "catacombs"
+}
+
+const getClassLevel = (msg) => {
+    return msg.match(/\(§e(\d+)§b\)/)[1]
+}
+
+const getUsername = (msg) => {
+    return msg.match(/§5§o §\w(\w+)§f:/)[1]
 }
 
 module.exports = { registerPartyFinderTriggers }

@@ -28,7 +28,15 @@ class Config {
         category: 'Dungeons',
         subcategory: 'Party Finder',
     })
-    partyfinder = false;
+    partyfinder = true;
+
+    @SwitchProperty({
+        name: 'Show class level',
+        description: 'Shows the player\'s class level in party finder.',
+        category: 'Dungeons',
+        subcategory: 'Party Finder',
+    })
+    partyfinderClassLevel = true;
 
     @SwitchProperty({
         name: 'Show cata level',
@@ -55,8 +63,8 @@ class Config {
     partyfinderSecretAverage = true;
 
     @SwitchProperty({
-        name: 'Show F7 PB',
-        description: 'Shows the player\'s fastest S+ time in floor 7 in party finder.',
+        name: 'Show S+ PB',
+        description: 'Shows the player\'s fastest S+ time for the current floor in party finder.',
         category: 'Dungeons',
         subcategory: 'Party Finder',
     })
@@ -64,10 +72,11 @@ class Config {
 
     constructor() {
         this.initialize(this);
+        this.addDependency("Show class level", "Party Finder Stats")
         this.addDependency("Show total secrets", "Party Finder Stats")
         this.addDependency("Show cata level", "Party Finder Stats")
         this.addDependency("Show secret average", "Party Finder Stats")
-        this.addDependency("Show F7 PB", "Party Finder Stats")
+        this.addDependency("Show S+ PB", "Party Finder Stats")
     }
 }
 

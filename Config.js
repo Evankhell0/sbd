@@ -12,13 +12,7 @@ import {
     @Vigilant,
 } from '../Vigilance/index.js';
 
-// The only parameter that is required is the first, which should be the Module name.
-// The other 2 parameters are optional.
-// The 2nd parameter is the title of the settings window, seen in the top left above the
-// category list.
-// The 3rd parameter is an object that determines the sorting order of the categories.
 @Vigilant('sbd', 'SBD Settings')
-
 class Config {
     @TextProperty({
         name: 'API Key',
@@ -36,8 +30,53 @@ class Config {
     })
     partyfinder = true;
 
+    @SwitchProperty({
+        name: 'Show class level',
+        description: 'Shows the player\'s class level in party finder.',
+        category: 'Dungeons',
+        subcategory: 'Party Finder',
+    })
+    partyfinderClassLevel = true;
+
+    @SwitchProperty({
+        name: 'Show cata level',
+        description: 'Shows the player\'s catacombs level in party finder.',
+        category: 'Dungeons',
+        subcategory: 'Party Finder',
+    })
+    partyfinderCata = true;
+
+    @SwitchProperty({
+        name: 'Show total secrets',
+        description: 'Shows the player\'s total amount of secrets in party finder.',
+        category: 'Dungeons',
+        subcategory: 'Party Finder',
+    })
+    partyfinderSecrets = true;
+
+    @SwitchProperty({
+        name: 'Show secret average',
+        description: 'Shows the player\'s secret average in party finder.',
+        category: 'Dungeons',
+        subcategory: 'Party Finder',
+    })
+    partyfinderSecretAverage = true;
+
+    @SwitchProperty({
+        name: 'Show S+ PB',
+        description: 'Shows the player\'s fastest S+ time for the current floor in party finder.',
+        category: 'Dungeons',
+        subcategory: 'Party Finder',
+    })
+    partyfinderF7PB = true;
+
     constructor() {
         this.initialize(this);
+        this.addDependency("Show class level", "Party Finder Stats")
+        this.addDependency("Show total secrets", "Party Finder Stats")
+        this.addDependency("Show cata level", "Party Finder Stats")
+        this.addDependency("Show secret average", "Party Finder Stats")
+        this.addDependency("Show S+ PB", "Party Finder Stats")
     }
 }
 

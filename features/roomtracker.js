@@ -20,14 +20,13 @@ const trackRooms = () => {
         for (let line of scoreboard) {
             let match = line.match(/^\d[\d/]+ .+ ([-\d,]+)$/);
             if (match) {
-                console.log(match);
-                if (dungeonRooms.length === 0 || dungeonRooms[dungeonRooms.length - 1].roomname !== match[0]) {
+                if (dungeonRooms.length === 0 || dungeonRooms[dungeonRooms.length - 1].roomname !== match[1]) {
                     const obj = {
                         timestamp: Date.now(),
-                        roomname: match[0]
+                        roomname: match[1]
                     };
                     dungeonRooms.push(obj);
-                    console.log(dungeonRooms);
+                   // console.log(dungeonRooms.map(x => JSON.stringify(x)))
                 }
             }
         }

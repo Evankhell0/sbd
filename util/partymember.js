@@ -12,7 +12,6 @@ class PartyMember {
             catacombs: {},
             master_catacombs: {}
         }
-        this.setUUID(name)
     }
 
     setUUID(name) {

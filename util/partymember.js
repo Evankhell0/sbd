@@ -12,7 +12,6 @@ class PartyMember {
             catacombs: {},
             master_catacombs: {}
         }
-        this.setUUID(name)
     }
 
     setUUID(name) {
@@ -41,7 +40,7 @@ class PartyMember {
             }
 
             const cataXP = profile["members"][this.uuid]["dungeons"]?.["dungeon_types"]?.["catacombs"]?.["experience"]
-            this.catalevel = calcSkillLevel("catacombs", cataXP).toFixed(0)
+            this.catalevel = Math.floor(calcSkillLevel("catacombs", cataXP))
 
             const totalRuns = Object.values(profile["members"][this.uuid]?.["dungeons"]?.["dungeon_types"] ?? {}).map(dungeon => {
                 return Object.values(dungeon["tier_completions"]).slice(0, -1).reduce((a, b) => a + b, 0)

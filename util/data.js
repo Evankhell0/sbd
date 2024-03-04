@@ -1,5 +1,9 @@
-class Data {
+export default class Data {
     static players = {}
-}
+    static invalidKey = false
 
-module.exports = { Data }
+    static reset() {
+        this.players = {}
+        this.invalidKey = false
+    }
+}

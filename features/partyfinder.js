@@ -2,8 +2,8 @@ import request from "requestV2"
 import { decodeNumeral } from "BloomCore/utils/Utils"
 
 import Config from "../Config.js"
-import { Data } from "../util/data.js"
-import { PartyMember } from "../util/partymember.js"
+import Data from "../util/data.js"
+import PartyMember from "../util/partymember.js"
 
 const registerPartyFinderTriggers = () => {
     register("itemTooltip", (lore, item) => {
@@ -33,8 +33,8 @@ const registerPartyFinderTriggers = () => {
                 return x
             }
 
-            if(player.uuid == null) {
-                player.setUUID(username)
+            if(!player.secrets || !player.catalevel) {
+                player.init()
             }
 
             hasChanged = true

@@ -29,25 +29,27 @@ export default class PartyMember {
     }
 
     updateStatsSkyCrypt() {
-        request({url: `https://sky.shiiyu.moe/api/v2/dungeons/${this.uuid}`, headers: { 'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json' }, json: true}).then(data => {
-            // TD replace with getting selected profile once sky shiiyu api is updated
-            const getCataLevel = (profile) => profile.dungeons?.catacombs?.level?.uncappedLevel
-            const profile = Object.values(data["profiles"]).filter(x => getCataLevel(x)).sort((a, b) => getCataLevel(b) - getCataLevel(a))[0]
+        Data.staggerRequest(() => {
+            return request({url: `https://sky.shiiyu.moe/api/v2/dungeons/${this.uuid}`, headers: { 'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json' }, json: true}).then(data => {
+                // TD replace with getting selected profile once sky shiiyu api is updated
+                const getCataLevel = (profile) => profile.dungeons?.catacombs?.level?.uncappedLevel
+                const profile = Object.values(data["profiles"]).filter(x => getCataLevel(x)).sort((a, b) => getCataLevel(b) - getCataLevel(a))[0]
 
-            this.secrets = profile["dungeons"]["secrets_found"]
-            this.catalevel = profile["dungeons"]["catacombs"]["level"]["uncappedLevel"]
-            this.runs =  profile["dungeons"]["floor_completions"]
+                this.secrets = profile["dungeons"]["secrets_found"]
+                this.catalevel = profile["dungeons"]["catacombs"]["level"]["uncappedLevel"]
+                this.runs =  profile["dungeons"]["floor_completions"]
 
-            for(let i = 1; i <= 7; i++) {
-                const dungeonTypes = ["catacombs", "master_catacombs"]
-                dungeonTypes.forEach(type => {
-                    this.pb[type][i] = this.getFloorPB(false, profile, this.uuid, type, i)
-                })
-            }
+                for(let i = 1; i <= 7; i++) {
+                    const dungeonTypes = ["catacombs", "master_catacombs"]
+                    dungeonTypes.forEach(type => {
+                        this.pb[type][i] = this.getFloorPB(false, profile, this.uuid, type, i)
+                    })
+                }
 
-            this.updateSecretAverage()
-            this.changed = true
-        }).catch(e => handleError(`Could not get data from SkyCrypt API for ${this.name}`, e.error))
+                this.updateSecretAverage()
+                this.changed = true
+            }).catch(e => handleError(`Could not get data from SkyCrypt API for ${this.name}`, e.error))
+        })
     }
 
     updateSecretsHypixel() {

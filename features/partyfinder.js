@@ -33,7 +33,7 @@ const registerPartyFinderTriggers = () => {
                 return x
             }
 
-            if(!player.secrets || !player.catalevel) {
+            if(player.uuid == null) {
                 player.init()
             }
 

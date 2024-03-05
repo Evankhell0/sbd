@@ -77,9 +77,7 @@ class Config {
         this.addDependency("Show cata level", "Party Finder Stats")
         this.addDependency("Show secret average", "Party Finder Stats")
         this.addDependency("Show S+ PB", "Party Finder Stats")
-        this.registerListener('API Key', newText => {
-            Data.reset()
-        })
+        this.registerListener('API Key', () => Data.reset())
     }
 }
 

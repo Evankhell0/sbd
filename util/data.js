@@ -2,7 +2,6 @@ export default class Data {
     static players = {}
     static invalidKey = false
     static requests = []
-    static inDungeon = false
 
     // only allow 2 simultaneous calls to SkyCrypt API
     static staggerRequest(request) {

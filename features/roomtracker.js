@@ -1,19 +1,11 @@
 import Config from "../Config.js";
-import Data from "../util/data.js";
 import Dungeon from "BloomCore/dungeons/Dungeon";
 
 const dungeonRooms = [];
 
 const registerWorldLoad = () => {
-    register("worldLoad", () => {
-        const scoreboard = Scoreboard.getLines().map(x => ChatLib.removeFormatting(x));
-        console.log(scoreboard.map(x => JSON.stringify(x)))
-        Data.inDungeon = scoreboard.some(x => /⏣ The Catac.+ombs \((.+)\)/.test(x))
-        console.log("SBD " + Data.inDungeon)
-    });
-
-    register("step", () => {
-        if(!Data.inDungeon)
+    register("tick", () => {
+        if(!Dungeon.inDungeon)
             return;
         const scoreboard = Scoreboard.getLines().map(a => ChatLib.removeFormatting(a));
         for(let line of scoreboard) {
@@ -25,30 +17,37 @@ const registerWorldLoad = () => {
                 });
             }
         }
-    }).setFps(1);
+    })
 
     register("chat", (score, rank) => {
-        let lastSlotItem = Player.getInventory().getStackInSlot(8);
-        if(lastSlotItem.getName().includes("Your Score Summary")) {
-            ChatLib.chat("Completed Dungeon");
-            combineTimes(dungeonRooms);
-        }
+        console.log("Completed Dungeon");
+        combineTimes(dungeonRooms);
     }).setChatCriteria("Team Score: ${score} (${rank})").setContains();
 
     register("command", (args) => {
         console.log(dungeonRooms.map(x => JSON.stringify(x)))
     }).setName("rooms")
+
+    register("command", (args) => {
+        combineTimes(dungeonRooms);
+    }).setName("combine")
 };
 
 const combineTimes = (arr) => {
     for(let i = 0; i < arr.length; i++) {
-        if(i - 1 == arr.length) {
+        if(i == arr.length - 1) {
             arr[i].time = Date.now() - arr[i].timestamp
         } else {
             arr[i].time = arr[i+1].timestamp - arr[i].timestamp
         }
     }
-    console.log(arr)
+    console.log(arr.map(x => JSON.stringify(x)))
+
+    const map = {};
+    arr.forEach(x => {
+        map[x.roomname] = map[x.roomname] ? map[x.roomname] + x.time : x.time
+    })
+    console.dir(map)
 }
 
 

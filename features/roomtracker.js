@@ -2,29 +2,41 @@ import Config from "../Config.js";
 import Dungeon from "BloomCore/dungeons/Dungeon";
 import { getRoom } from "BloomCore/utils/Utils";
 
-const dungeonRooms = [];
+let dungeonRooms = [];
 
 const registerWorldLoad = () => {
+    // TD replace tick with scoreboard update
     register("tick", () => {
         if(!Dungeon.inDungeon)
             return;
-        dungeonRooms.push({
-            timestamp: Date.now(),
-            room: getRoom()
-        });
+        const currentRoom = getRoom()
+        if(currentRoom && (dungeonRooms.length === 0 || dungeonRooms.slice(-1)[0].room !== currentRoom.name)) {
+            dungeonRooms.push({
+                timestamp: Date.now(),
+                room: currentRoom.name
+            });
+        }
     })
 
     register("chat", (score, rank) => {
         console.log("Completed Dungeon");
-        combineTimes(dungeonRooms);
+        const roomTimes = combineTimes(dungeonRooms);
+        console.dir(roomTimes);
     }).setChatCriteria("Team Score: ${score} (${rank})").setContains();
 
+    // Reset rooms when you leave the dungeon
+    register("worldLoad", () => {
+        dungeonRooms = [];
+    });
+
+    // Debug Commands
     register("command", (args) => {
         console.log(dungeonRooms.map(x => JSON.stringify(x)))
     }).setName("rooms")
 
     register("command", (args) => {
-        combineTimes(dungeonRooms);
+        const roomTimes = combineTimes(dungeonRooms);
+        console.dir(roomTimes);
     }).setName("combine")
 
     register("command", (args) => {
@@ -44,9 +56,9 @@ const combineTimes = (arr) => {
 
     const map = new Map();
     arr.forEach(x => {
-        map[x.room.name] = map[x.room.name] ? map[x.room.name] + x.time : x.time
+        map[x.room] = map[x.room] ? map[x.room] + x.time : x.time
     })
-    console.dir(map)
+    return map;
 }
 
 

@@ -1,5 +1,6 @@
 import Config from "../Config.js";
 import Dungeon from "BloomCore/dungeons/Dungeon";
+import { getRoom } from "BloomCore/utils/Utils";
 
 const dungeonRooms = [];
 
@@ -7,16 +8,10 @@ const registerWorldLoad = () => {
     register("tick", () => {
         if(!Dungeon.inDungeon)
             return;
-        const scoreboard = Scoreboard.getLines().map(a => ChatLib.removeFormatting(a));
-        for(let line of scoreboard) {
-            const match = line.match(/^\d[\d/]+ .+ ([-\d,]+)$/);
-            if(match && (dungeonRooms.length === 0 || dungeonRooms[dungeonRooms.length - 1].roomname !== match[1])) {
-                dungeonRooms.push({
-                    timestamp: Date.now(),
-                    roomname: match[1]
-                });
-            }
-        }
+        dungeonRooms.push({
+            timestamp: Date.now(),
+            room: getRoom()
+        });
     })
 
     register("chat", (score, rank) => {
@@ -31,6 +26,10 @@ const registerWorldLoad = () => {
     register("command", (args) => {
         combineTimes(dungeonRooms);
     }).setName("combine")
+
+    register("command", (args) => {
+        console.dir(getRoom())
+    }).setName("room")
 };
 
 const combineTimes = (arr) => {
@@ -43,9 +42,9 @@ const combineTimes = (arr) => {
     }
     console.log(arr.map(x => JSON.stringify(x)))
 
-    const map = {};
+    const map = new Map();
     arr.forEach(x => {
-        map[x.roomname] = map[x.roomname] ? map[x.roomname] + x.time : x.time
+        map[x.room.name] = map[x.room.name] ? map[x.room.name] + x.time : x.time
     })
     console.dir(map)
 }

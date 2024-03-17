@@ -1,7 +1,6 @@
 import request from "requestV2"
 import { calcSkillLevel } from "BloomCore/utils/Utils"
 
-import Config from "../Config.js"
 import Data from "../util/data.js"
 import { timeToString } from "../util/calc.js"
 import { handleError } from "../util/error.js"
@@ -10,21 +9,18 @@ export default class PartyMember {
     constructor(name) {
         this.name = name
         this.uuid = null
-        this.pb = {
-            catacombs: {},
-            master_catacombs: {}
+        this.dungeons = {
+            pb: {
+                catacombs: {},
+                master_catacombs: {}
+            }
         }
     }
 
     init() {
         request({url: `https://api.mojang.com/users/profiles/minecraft/${this.name}`, json: true}).then(data => {
             this.uuid = data.id
-            if(Data.invalidKey) {
-                this.updateStatsSkyCrypt()
-            } else {
-                this.updateSecretsHypixel()
-                this.updateDungeonStatsHypixel()
-            }
+            this.updateDungeonStats()
         }).catch(e => handleError(`Could not find uuid for ${this.name}`, e.errorMessage))
     }
 
@@ -35,14 +31,14 @@ export default class PartyMember {
                 const getCataLevel = (profile) => profile.dungeons?.catacombs?.level?.uncappedLevel
                 const profile = Object.values(data["profiles"]).filter(x => getCataLevel(x)).sort((a, b) => getCataLevel(b) - getCataLevel(a))[0]
 
-                this.secrets = profile["dungeons"]["secrets_found"]
-                this.catalevel = profile["dungeons"]["catacombs"]["level"]["uncappedLevel"]
-                this.runs =  profile["dungeons"]["floor_completions"]
+                this.dungeons.secrets = profile["dungeons"]["secrets_found"]
+                this.dungeons.catalevel = profile["dungeons"]["catacombs"]["level"]["uncappedLevel"]
+                this.dungeons.runs =  profile["dungeons"]["floor_completions"]
 
                 for(let i = 1; i <= 7; i++) {
                     const dungeonTypes = ["catacombs", "master_catacombs"]
                     dungeonTypes.forEach(type => {
-                        this.pb[type][i] = this.getFloorPB(false, profile, this.uuid, type, i)
+                        this.dungeons.pb[type][i] = this.getFloorPB(false, profile, this.uuid, type, i)
                     })
                 }
 
@@ -52,38 +48,14 @@ export default class PartyMember {
         })
     }
 
-    updateSecretsHypixel() {
-        request({url: `https://api.hypixel.net/player?key=${Config.apikey}&uuid=${this.uuid}`, json: true}).then(data => {
-            this.secrets = data.player.achievements.skyblock_treasure_hunter
-            this.updateSecretAverage()
-            this.changed = true
-        }).catch(e => handleError(`Could not get secrets from Hypixel API for ${this.name}`, e.cause))
-    }
-
-    updateDungeonStatsHypixel() {
-        if(Data.invalidKey) {
-            return
-        }
-        request({url: `https://api.hypixel.net/v2/skyblock/profiles?key=${Config.apikey}&uuid=${this.uuid}`, json: true}).then(data => {
-            const profile = data.profiles.find(x => x.selected)
-
-            for(let i = 1; i <= 7; i++) {
-                this.pb.catacombs[i] = this.getFloorPB(true, profile, this.uuid, "catacombs", i)
-                this.pb.master_catacombs[i] = this.getFloorPB(true, profile, this.uuid, "master_catacombs", i)
-            }
-
-            const cataXP = profile["members"][this.uuid]["dungeons"]?.["dungeon_types"]?.["catacombs"]?.["experience"]
-            this.catalevel = Math.floor(calcSkillLevel("catacombs", cataXP))
-
-            const totalRuns = Object.values(profile["members"][this.uuid]?.["dungeons"]?.["dungeon_types"] ?? {}).map(dungeon => {
-                return Object.values(dungeon["tier_completions"]).slice(0, -1).reduce((a, b) => a + b, 0)
-            }).reduce((a, b) => a + b, 0)
-            this.runs = totalRuns
-
+    updateDungeonStats() {
+        request({url: `https://sbd.evankhell.workers.dev/player/${this.uuid}`, headers: { 'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json' }, json: true}).then(data => {
+            this.dungeons = data.dungeons
+            this.dungeons.catalevel = Math.floor(calcSkillLevel("catacombs", data.dungeons.cataxp))
             this.updateSecretAverage()
             this.changed = true
         }).catch(e => {
-            handleError(`Could not get skyblock profile from Hypixel API for ${this.name}`, e.cause)
+            handleError(`Could not get skyblock profile from SBD API for ${this.name}`, e.cause)
             this.updateStatsSkyCrypt()
         })
     }
@@ -108,8 +80,8 @@ export default class PartyMember {
     }
 
     updateSecretAverage() {
-        if(this.secrets && this.runs) {
-            this.secretAverage = (parseInt(this.secrets) / this.runs).toFixed(1)
+        if(this.dungeons.secrets && this.dungeons.runs) {
+            this.dungeons.secretAverage = (parseInt(this.dungeons.secrets) / this.dungeons.runs).toFixed(1)
         }
     }
 

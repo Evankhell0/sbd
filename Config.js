@@ -14,14 +14,6 @@ import {
 
 @Vigilant('sbd', 'SBD Settings')
 class Config {
-    @TextProperty({
-        name: 'API Key',
-        description: 'Your API Key. Autodetected from the /api new message.',
-        category: 'Config',
-        protected: true,
-    })
-    apikey = "";
-
     @SwitchProperty({
         name: 'Party Finder Stats',
         description: 'Shows stats of players in Party Finder.',
@@ -77,7 +69,6 @@ class Config {
         this.addDependency("Show cata level", "Party Finder Stats")
         this.addDependency("Show secret average", "Party Finder Stats")
         this.addDependency("Show S+ PB", "Party Finder Stats")
-        this.registerListener('API Key', () => Data.reset())
     }
 }
 

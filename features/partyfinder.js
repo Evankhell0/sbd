@@ -63,24 +63,24 @@ const createSuffix = (msg, player, floor, dungeonType) => {
         suffix += ` §b(§e${getClassLevel(msg) ?? "?"}§b)§r`
     }
     if(Config.partyfinderCata) {
-        if(!Config.partyfinderClassLevel && !player.catalevel) {
+        if(!Config.partyfinderClassLevel && !player.dungeons.catalevel) {
             suffix += ` §b(§e${getClassLevel(msg) ?? "?"}§b)§r`
         } else {
-            suffix += ` §b(§6${player.catalevel ?? "?"}§b)§r`
+            suffix += ` §b(§6${player.dungeons.catalevel ?? "?"}§b)§r`
         }
     }
     if(Config.partyfinderSecrets && Config.partyfinderSecretAverage) {
-        suffix += ` §8[§a${player.secrets ?? "?"}§8/§b${player.secretAverage ?? "?"}§8]§r`
+        suffix += ` §8[§a${player.dungeons.secrets ?? "?"}§8/§b${player.dungeons.secretAverage ?? "?"}§8]§r`
     } else {
         if(Config.partyfinderSecrets) {
-            suffix += ` §8[§a${player.secrets ?? "?"}§8]§r`
+            suffix += ` §8[§a${player.dungeons.secrets ?? "?"}§8]§r`
         }
         if(Config.partyfinderSecretAverage) {
-            suffix += ` §8[§b${player.secretAverage ?? "?"}§8]§r`
+            suffix += ` §8[§b${player.dungeons.secretAverage ?? "?"}§8]§r`
         }
     }
     if(Config.partyfinderF7PB) {
-        suffix += ` §8[§9${player.pb[dungeonType][floor]?.["S+"] ?? "?"}§8]§r`
+        suffix += ` §8[§9${player.dungeons.pb[dungeonType][floor]?.["S+"] ?? "?"}§8]§r`
     }
     return `${removeSuffix(msg)}${suffix}`
 }

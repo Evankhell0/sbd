@@ -50,6 +50,10 @@ export default class PartyMember {
 
     updateDungeonStats() {
         request({url: `https://sbd.evankhell.workers.dev/player/${this.uuid}`, headers: { 'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json' }, json: true}).then(data => {
+            if(!data.success) {
+                this.updateStatsSkyCrypt()
+                return;
+            }
             this.dungeons = data.dungeons
             this.dungeons.catalevel = Math.floor(calcSkillLevel("catacombs", data.dungeons.cataxp))
             this.updateSecretAverage()

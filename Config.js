@@ -62,13 +62,33 @@ class Config {
     })
     partyfinderF7PB = true;
 
+    @SwitchProperty({
+        name: 'Autokick',
+        description: 'Autokick players below certain requirements.',
+        category: 'Dungeons',
+        subcategory: 'Autokick',
+    })
+    autokick = false;
+
+    @TextProperty({
+        name: 'Required S+ PB',
+        description: 'Time in seconds.',
+        category: 'Dungeons',
+        subcategory: 'Autokick',
+        placeholder: "no req"
+    })
+    requiredPB = "";
+
     constructor() {
         this.initialize(this);
+
         this.addDependency("Show class level", "Party Finder Stats")
         this.addDependency("Show total secrets", "Party Finder Stats")
         this.addDependency("Show cata level", "Party Finder Stats")
         this.addDependency("Show secret average", "Party Finder Stats")
         this.addDependency("Show S+ PB", "Party Finder Stats")
+
+        this.addDependency("Required S+ PB", "Autokick")
     }
 }
 

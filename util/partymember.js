@@ -18,9 +18,9 @@ export default class PartyMember {
     }
 
     init() {
-        request({url: `https://api.mojang.com/users/profiles/minecraft/${this.name}`, json: true}).then(data => {
+        return request({url: `https://api.mojang.com/users/profiles/minecraft/${this.name}`, json: true}).then(data => {
             this.uuid = data.id
-            this.updateDungeonStats()
+            return this.updateDungeonStats()
         }).catch(e => handleError(`Could not find uuid for ${this.name}`, e.errorMessage))
     }
 
@@ -49,7 +49,7 @@ export default class PartyMember {
     }
 
     updateDungeonStats() {
-        request({url: `https://sbd.evankhell.workers.dev/player/${this.uuid}`, headers: { 'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json' }, json: true}).then(data => {
+        return request({url: `https://sbd.evankhell.workers.dev/player/${this.uuid}`, headers: { 'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json' }, json: true}).then(data => {
             if(!data.success) {
                 this.updateStatsSkyCrypt()
                 return;
@@ -78,7 +78,9 @@ export default class PartyMember {
         } catch(e) { }
         const pb = {
             "S": timeToString(timeS),
-            "S+": timeToString(timeSPlus)
+            "S+": timeToString(timeSPlus),
+            "rawS": timeS,
+            "rawS+": timeSPlus
         }
         return pb
     }
@@ -93,5 +95,9 @@ export default class PartyMember {
         const hasChanged = this.changed
         this.changed = false
         return hasChanged
+    }
+
+    toString() {
+        return `§8[§eSBD§8]§r ${this.name} | §6${this.dungeons.catalevel}§r | §a${this.dungeons.secrets}§r | §b${this.dungeons.secretAverage}§r | §9${this.dungeons.pb["catacombs"]["7"]["S+"]}§r`
     }
 }

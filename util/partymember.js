@@ -25,7 +25,7 @@ export default class PartyMember {
             request({url: `https://api.ashcon.app/mojang/v2/user/${this.name}`, json: true}).then(data => {
                 this.uuid = data.uuid.replace("-", "")
                 return this.updateDungeonStats()
-            }).catch(e => handleError(`Could not find uuid for ${this.name}`, e.errorMessage))
+            }).catch(e => handleError(`Could not find uuid for ${this.name}`, e.reason))
         })
     }
 

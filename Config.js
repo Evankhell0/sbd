@@ -79,6 +79,14 @@ class Config {
     })
     requiredPB = "";
 
+    @SwitchProperty({
+        name: 'Send kick message',
+        description: 'Sends a message in party chat before kicking.',
+        category: 'Dungeons',
+        subcategory: 'Autokick',
+    })
+    kickmessage = false;
+
     constructor() {
         this.initialize(this);
 
@@ -89,6 +97,7 @@ class Config {
         this.addDependency("Show S+ PB", "Party Finder Stats")
 
         this.addDependency("Required S+ PB", "Autokick")
+        this.addDependency("Send kick message", "Autokick")
     }
 }
 

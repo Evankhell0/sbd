@@ -1,6 +1,7 @@
 import Config from "../Config.js"
 import PartyMember from "../util/partymember.js"
 import Data from "../util/data.js"
+import { timeToString } from "../util/calc.js"
 
 const autokick = register("chat", (username, dungeonClass, classLevel) => {
     if(!Config.autokick) {
@@ -25,7 +26,12 @@ const checkAndKick = (player) => {
     const requiredPB = getRequiredPB()
     if(pb && requiredPB && pb > requiredPB) {
         ChatLib.chat(`§8[§eSBD§8]§r Kicking ${player.name} (PB: §e${pb}§r | Req: §e${requiredPB}§r)`)
-        ChatLib.command(`party kick ${player.name}`)
+        if(Config.kickmessage) {
+            ChatLib.command(`pc [SBD] Kicking ${player.name} (PB: ${timeToString(pb * 1000)} | Req: ${timeToString(requiredPB * 1000)})`)
+        }
+        setTimeout(() => {
+            ChatLib.command(`party kick ${player.name}`)
+        }, 200)
     }
 }
 

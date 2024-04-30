@@ -21,7 +21,12 @@ export default class PartyMember {
         return request({url: `https://api.mojang.com/users/profiles/minecraft/${this.name}`, json: true}).then(data => {
             this.uuid = data.id
             return this.updateDungeonStats()
-        }).catch(e => handleError(`Could not find uuid for ${this.name}`, e.errorMessage))
+        }).catch(() => {
+            request({url: `https://api.ashcon.app/mojang/v2/user/${this.name}`, json: true}).then(data => {
+                this.uuid = data.uuid.replace("-", "")
+                return this.updateDungeonStats()
+            }).catch(e => handleError(`Could not find uuid for ${this.name}`, e.errorMessage))
+        })
     }
 
     updateStatsSkyCrypt() {
@@ -51,8 +56,7 @@ export default class PartyMember {
     updateDungeonStats() {
         return request({url: `https://sbd.evankhell.workers.dev/player/${this.uuid}`, headers: { 'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json' }, json: true}).then(data => {
             if(!data.success) {
-                this.updateStatsSkyCrypt()
-                return;
+                return this.updateStatsSkyCrypt()
             }
             this.dungeons = data.dungeons
             this.dungeons.catalevel = Math.floor(calcSkillLevel("catacombs", data.dungeons.cataxp))
@@ -60,7 +64,7 @@ export default class PartyMember {
             this.changed = true
         }).catch(e => {
             handleError(`Could not get skyblock profile from SBD API for ${this.name}`, e.cause)
-            this.updateStatsSkyCrypt()
+            return this.updateStatsSkyCrypt()
         })
     }
 

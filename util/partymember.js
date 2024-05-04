@@ -2,7 +2,7 @@ import request from "requestV2"
 import { calcSkillLevel } from "BloomCore/utils/Utils"
 
 import Data from "../util/data.js"
-import { timeToString } from "../util/calc.js"
+import { timeToString, indexToFloor } from "../util/calc.js"
 import { handleError } from "../util/error.js"
 
 export default class PartyMember {
@@ -101,7 +101,7 @@ export default class PartyMember {
         return hasChanged
     }
 
-    toString() {
-        return `§8[§eSBD§8]§r ${this.name} | §6${this.dungeons.catalevel}§r | §a${this.dungeons.secrets}§r | §b${this.dungeons.secretAverage}§r | §9${this.dungeons.pb["catacombs"]["7"]["S+"]}§r`
+    toString(floorIndex = 0, pb) {
+        return `§8[§eSBD§8]§r ${this.name} | §6${this.dungeons.catalevel}§r | §a${this.dungeons.secrets}§r | §b${this.dungeons.secretAverage}§r | §9${pb ?? this.dungeons.pb["catacombs"]["7"]["S+"]}§r (${indexToFloor(floorIndex)})`
     }
 }

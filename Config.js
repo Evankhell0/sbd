@@ -70,9 +70,24 @@ class Config {
     })
     autokick = false;
 
+    @SelectorProperty({
+        name: 'Selected Floor',
+        description: 'Which floor\'s S+ PB should be checked.',
+        category: 'Dungeons',
+        subcategory: 'Autokick',
+        options: [
+            "F7",
+            "M4",
+            "M5",
+            "M6",
+            "M7"
+        ]
+    })
+    selectedfloor = 0;
+
     @TextProperty({
         name: 'Required S+ PB',
-        description: 'Time in seconds.',
+        description: 'Time in seconds. Leave empty for no requirement.',
         category: 'Dungeons',
         subcategory: 'Autokick',
         placeholder: "no req"

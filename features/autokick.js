@@ -21,17 +21,34 @@ const autokick = register("chat", (username, dungeonClass, classLevel) => {
 }).setCriteria(/&dParty Finder &r&f> &r&\w(\w+) &r&ejoined the dungeon group! \(&r&b(\w+) Level (\w+)&r&e\)&r/);
 
 const checkAndKick = (player) => {
-    ChatLib.chat(player.toString())
-    const pb = Math.floor(player.dungeons.pb["catacombs"]["7"]["rawS+"] / 1000)
+    const pb = getRawPB(Config.selectedfloor, player)
     const requiredPB = getRequiredPB()
+    ChatLib.chat(player.toString(Config.selectedfloor, timeToString(pb)))
     if(pb && requiredPB && pb > requiredPB) {
-        ChatLib.chat(`§8[§eSBD§8]§r Kicking ${player.name} (PB: §e${pb}§r | Req: §e${requiredPB}§r)`)
+        ChatLib.chat(`§8[§eSBD§8]§r Kicking ${player.name} (PB: §e${timeToString(pb)}§r | Req: §e${timeToString(requiredPB)}§r)`)
         if(Config.kickmessage) {
-            ChatLib.command(`pc [SBD] Kicking ${player.name} (PB: ${timeToString(pb * 1000)} | Req: ${timeToString(requiredPB * 1000)})`)
+            ChatLib.command(`pc [SBD] Kicking ${player.name} (PB: ${timeToString(pb)} | Req: ${timeToString(requiredPB)})`)
         }
         setTimeout(() => {
             ChatLib.command(`party kick ${player.name}`)
         }, 200)
+    }
+}
+
+const getRawPB = (selectedfloor, player) => {
+    switch(selectedfloor) {
+        case 0:
+            return player.dungeons.pb["catacombs"]["7"]["rawS+"]
+        case 1:
+            return player.dungeons.pb["master_catacombs"]["4"]["rawS+"]
+        case 2:
+            return player.dungeons.pb["master_catacombs"]["5"]["rawS+"]
+        case 3:
+            return player.dungeons.pb["master_catacombs"]["6"]["rawS+"]
+        case 4:
+            return player.dungeons.pb["master_catacombs"]["7"]["rawS+"]
+        default:
+            return 0
     }
 }
 
@@ -40,7 +57,7 @@ const getRequiredPB = () => {
     if(requiredPB != parseInt(requiredPB)) {
         return null
     }
-    return parseInt(requiredPB)
+    return parseInt(requiredPB) * 1000
 }
 
 module.exports = { autokick }

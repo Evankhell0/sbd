@@ -62,13 +62,57 @@ class Config {
     })
     partyfinderF7PB = true;
 
+    @SwitchProperty({
+        name: 'Autokick',
+        description: 'Autokick players below certain requirements.',
+        category: 'Dungeons',
+        subcategory: 'Autokick',
+    })
+    autokick = false;
+
+    @SelectorProperty({
+        name: 'Selected Floor',
+        description: 'Which floor\'s S+ PB should be checked.',
+        category: 'Dungeons',
+        subcategory: 'Autokick',
+        options: [
+            "F7",
+            "M4",
+            "M5",
+            "M6",
+            "M7"
+        ]
+    })
+    selectedfloor = 0;
+
+    @TextProperty({
+        name: 'Required S+ PB',
+        description: 'Time in seconds. Leave empty for no requirement.',
+        category: 'Dungeons',
+        subcategory: 'Autokick',
+        placeholder: "no req"
+    })
+    requiredPB = "";
+
+    @SwitchProperty({
+        name: 'Send kick message',
+        description: 'Sends a message in party chat before kicking.',
+        category: 'Dungeons',
+        subcategory: 'Autokick',
+    })
+    kickmessage = false;
+
     constructor() {
         this.initialize(this);
+
         this.addDependency("Show class level", "Party Finder Stats")
         this.addDependency("Show total secrets", "Party Finder Stats")
         this.addDependency("Show cata level", "Party Finder Stats")
         this.addDependency("Show secret average", "Party Finder Stats")
         this.addDependency("Show S+ PB", "Party Finder Stats")
+
+        this.addDependency("Required S+ PB", "Autokick")
+        this.addDependency("Send kick message", "Autokick")
     }
 }
 

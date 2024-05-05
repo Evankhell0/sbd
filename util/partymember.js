@@ -2,7 +2,7 @@ import request from "requestV2"
 import { calcSkillLevel } from "BloomCore/utils/Utils"
 
 import Data from "../util/data.js"
-import { timeToString } from "../util/calc.js"
+import { timeToString, indexToFloor } from "../util/calc.js"
 import { handleError } from "../util/error.js"
 
 export default class PartyMember {
@@ -18,10 +18,15 @@ export default class PartyMember {
     }
 
     init() {
-        request({url: `https://api.mojang.com/users/profiles/minecraft/${this.name}`, json: true}).then(data => {
+        return request({url: `https://api.mojang.com/users/profiles/minecraft/${this.name}`, json: true}).then(data => {
             this.uuid = data.id
-            this.updateDungeonStats()
-        }).catch(e => handleError(`Could not find uuid for ${this.name}`, e.errorMessage))
+            return this.updateDungeonStats()
+        }).catch(() => {
+            request({url: `https://api.ashcon.app/mojang/v2/user/${this.name}`, json: true}).then(data => {
+                this.uuid = data.uuid.replace("-", "")
+                return this.updateDungeonStats()
+            }).catch(e => handleError(`Could not find uuid for ${this.name}`, e.reason))
+        })
     }
 
     updateStatsSkyCrypt() {
@@ -49,10 +54,9 @@ export default class PartyMember {
     }
 
     updateDungeonStats() {
-        request({url: `https://sbd.evankhell.workers.dev/player/${this.uuid}`, headers: { 'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json' }, json: true}).then(data => {
+        return request({url: `https://sbd.evankhell.workers.dev/player/${this.uuid}`, headers: { 'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json' }, json: true}).then(data => {
             if(!data.success) {
-                this.updateStatsSkyCrypt()
-                return;
+                return this.updateStatsSkyCrypt()
             }
             this.dungeons = data.dungeons
             this.dungeons.catalevel = Math.floor(calcSkillLevel("catacombs", data.dungeons.cataxp))
@@ -60,7 +64,7 @@ export default class PartyMember {
             this.changed = true
         }).catch(e => {
             handleError(`Could not get skyblock profile from SBD API for ${this.name}`, e.cause)
-            this.updateStatsSkyCrypt()
+            return this.updateStatsSkyCrypt()
         })
     }
 
@@ -78,7 +82,9 @@ export default class PartyMember {
         } catch(e) { }
         const pb = {
             "S": timeToString(timeS),
-            "S+": timeToString(timeSPlus)
+            "S+": timeToString(timeSPlus),
+            "rawS": timeS,
+            "rawS+": timeSPlus
         }
         return pb
     }
@@ -93,5 +99,9 @@ export default class PartyMember {
         const hasChanged = this.changed
         this.changed = false
         return hasChanged
+    }
+
+    toString(floorIndex = 0, pb) {
+        return `§8[§eSBD§8]§r ${this.name} | §6${this.dungeons.catalevel}§r | §a${this.dungeons.secrets}§r | §b${this.dungeons.secretAverage}§r | §9${pb ?? this.dungeons.pb["catacombs"]["7"]["S+"]}§r (§e${indexToFloor(floorIndex)}§r)`
     }
 }

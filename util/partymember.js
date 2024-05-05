@@ -102,6 +102,6 @@ export default class PartyMember {
     }
 
     toString(floorIndex = 0, pb) {
-        return `§8[§eSBD§8]§r ${this.name} | §6${this.dungeons.catalevel}§r | §a${this.dungeons.secrets}§r | §b${this.dungeons.secretAverage}§r | §9${pb ?? this.dungeons.pb["catacombs"]["7"]["S+"]}§r (${indexToFloor(floorIndex)})`
+        return `§8[§eSBD§8]§r ${this.name} | §6${this.dungeons.catalevel}§r | §a${this.dungeons.secrets}§r | §b${this.dungeons.secretAverage}§r | §9${pb ?? this.dungeons.pb["catacombs"]["7"]["S+"]}§r (§e${indexToFloor(floorIndex)}§r)`
     }
 }

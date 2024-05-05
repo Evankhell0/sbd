@@ -31,7 +31,7 @@ const checkAndKick = (player) => {
         }
         setTimeout(() => {
             ChatLib.command(`party kick ${player.name}`)
-        }, 200)
+        }, 400)
     }
 }
 

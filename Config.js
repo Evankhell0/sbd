@@ -1,5 +1,3 @@
-import Data from "./util/data.js";
-
 import {
     @ButtonProperty,
     @CheckboxProperty,

@@ -27,11 +27,13 @@ const checkAndKick = (player) => {
     if(pb && requiredPB && pb > requiredPB) {
         ChatLib.chat(`§8[§eSBD§8]§r Kicking ${player.name} (PB: §e${timeToString(pb)}§r | Req: §e${timeToString(requiredPB)}§r)`)
         if(Config.kickmessage) {
-            ChatLib.command(`pc [SBD] Kicking ${player.name} (PB: ${timeToString(pb)} | Req: ${timeToString(requiredPB)})`)
+            Data.staggerChatMessage(() => {
+                ChatLib.command(`pc [SBD] Kicking ${player.name} (PB: ${timeToString(pb)} | Req: ${timeToString(requiredPB)})`)
+            })
         }
-        setTimeout(() => {
+        Data.staggerChatMessage(() => {
             ChatLib.command(`party kick ${player.name}`)
-        }, 400)
+        })
     }
 }
 

@@ -40,7 +40,9 @@ export default class Data {
         if(Date.now() - this.chatMessages.lastMessage >= this.chatMessages.timeout) {
             this.chatMessages.lastMessage = Date.now()
             const func = this.chatMessages.queue.shift()
-            func()
+			if(func) {
+				func()
+			}
         }
         setTimeout(() => this.processNextChatMessage(), this.chatMessages.timeout)
     }

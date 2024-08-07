@@ -56,10 +56,15 @@ const getRawPB = (selectedfloor, player) => {
 
 const getRequiredPB = () => {
     requiredPB = Config.requiredPB;
-    if(requiredPB != parseInt(requiredPB)) {
-        return null
+    if(requiredPB == parseInt(requiredPB)) {
+        return parseInt(requiredPB) * 1000
     }
-    return parseInt(requiredPB) * 1000
+    if(/^\d+:\d\d$/.test(requiredPB)) {
+        const split = requiredPB.split(":")
+        const ms = (parseInt(split[0]) * 60 + parseInt(split[1])) * 1000
+        return ms
+    }
+    return null
 }
 
 module.exports = { autokick }

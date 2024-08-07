@@ -88,15 +88,17 @@ const createSuffix = (msg, player, floor, dungeonType) => {
 const getFloor = (lore) => {
     const floorLine = lore.find(x => /§7Floor: §bFloor /.test(x))
     if(floorLine) {
-        const split = floorLine.split(" ")
-        floor = decodeNumeral(split[split.length - 1])
+        let floor = floorLine.split(" ").pop()
+        if(floor != parseInt(floor)) {
+            floor = decodeNumeral(floor)
+        }
         return floor
     }
     return 0
 }
 
 const getDungeonType = (lore) => {
-    if(lore.some(x => /§5§o§7Dungeon: §bMaster Mode Catacombs/.test(x))) {
+    if(lore.some(x => /§5§o§7Dungeon: §bMaster Mode( The)* Catacombs/.test(x))) {
         return "master_catacombs"
     }
     return "catacombs"

@@ -96,7 +96,7 @@ const getFloor = (lore) => {
 }
 
 const getDungeonType = (lore) => {
-    if(lore.some(x => /§5§o§7Dungeon: §bMaster Mode Catacombs/.test(x))) {
+    if(lore.some(x => /§5§o§7Dungeon: §bMaster Mode( The)* Catacombs/.test(x))) {
         return "master_catacombs"
     }
     return "catacombs"

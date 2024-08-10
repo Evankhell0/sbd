@@ -61,6 +61,14 @@ class Config {
     partyfinderF7PB = true;
 
     @SwitchProperty({
+        name: 'Show missing classes',
+        description: 'Displays missing classes in M4/M6/M7 party finder.',
+        category: 'Dungeons',
+        subcategory: 'Party Finder',
+    })
+    missingclasses = false;
+
+    @SwitchProperty({
         name: 'Autokick',
         description: 'Autokick players below certain requirements.',
         category: 'Dungeons',

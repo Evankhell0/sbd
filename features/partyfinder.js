@@ -7,7 +7,7 @@ import PartyMember from "../util/partymember.js"
 
 const registerPartyFinderTriggers = () => {
     register("itemTooltip", (lore, item) => {
-        if(!Config.partyfinder) {
+        if(!Config.partyfinder && !Config.missingclasses) {
             return
         }
         const itemName = lore[0]
@@ -18,6 +18,15 @@ const registerPartyFinderTriggers = () => {
         const dungeonType = getDungeonType(lore)
         let hasChanged = false
 
+        if(Config.missingclasses && dungeonType == "master_catacombs" && [4, 6, 7].includes(floor) && !hasMissingClasses(lore)) {
+            const missingClasses = getMissingClasses(lore)
+            lore.push(`§cMissing Classes: ${missingClasses.join(", ")}`)
+            item.setLore(lore)
+        }
+
+        if(!Config.partyfinder) {
+            return
+        }
         lore = lore.map(x => {
             if(!/§5§o §\w\w+§f: §\w\w+§b/.test(x)) {
                 return x.replace(/§5§o/, "")
@@ -44,6 +53,10 @@ const registerPartyFinderTriggers = () => {
             item.setLore(lore)
         }
     });
+}
+
+const hasMissingClasses = (lore) => {
+    return lore.some(x => /Missing Classes:/.test(x))
 }
 
 const hasCustomSuffix = (msg) => {
@@ -110,6 +123,18 @@ const getClassLevel = (msg) => {
 
 const getUsername = (msg) => {
     return msg.match(/§5§o §\w(\w+)§f:/)[1]
+}
+
+const getMissingClasses = (lore) => {
+    let classes = ["Archer", "Berserk", "Mage", "Tank", "Healer"]
+    lore.forEach(x => {
+        const match = x.match(/§5§o §\w\w+§f: §\w(\w+)§\w \(§e\d+§b\)/)
+        if(match) {
+            console.log(match[1])
+            classes = classes.filter(x => x != match[1])
+        }
+    })
+    return classes
 }
 
 module.exports = { registerPartyFinderTriggers }

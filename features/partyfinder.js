@@ -20,7 +20,7 @@ const registerPartyFinderTriggers = () => {
 
         if(Config.missingclasses && dungeonType == "master_catacombs" && [4, 6, 7].includes(floor) && !hasMissingClasses(lore)) {
             const missingClasses = getMissingClasses(lore)
-            lore.push(`§cMissing Classes: ${missingClasses.join(", ")}`)
+            lore.push(`§e§lMissing:§r§f ${missingClasses.join(", ")}`)
             item.setLore(lore)
         }
 
@@ -56,7 +56,7 @@ const registerPartyFinderTriggers = () => {
 }
 
 const hasMissingClasses = (lore) => {
-    return lore.some(x => /Missing Classes:/.test(x))
+    return lore.some(x => /Missing:§r/.test(x))
 }
 
 const hasCustomSuffix = (msg) => {
@@ -130,7 +130,6 @@ const getMissingClasses = (lore) => {
     lore.forEach(x => {
         const match = x.match(/§5§o §\w\w+§f: §\w(\w+)§\w \(§e\d+§b\)/)
         if(match) {
-            console.log(match[1])
             classes = classes.filter(x => x != match[1])
         }
     })

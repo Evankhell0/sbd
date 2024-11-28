@@ -32,11 +32,11 @@ export default class PartyMember {
     updateStatsSkyCrypt() {
         Data.staggerRequest(() => {
             return request({url: `https://sky.shiiyu.moe/api/v2/dungeons/${this.uuid}`, headers: { 'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json' }, json: true}).then(data => {
-                // TD replace with getting selected profile once sky shiiyu api is updated
-                const getCataLevel = (profile) => profile.dungeons?.catacombs?.level?.uncappedLevel
-                const profile = Object.values(data["profiles"]).filter(x => getCataLevel(x)).sort((a, b) => getCataLevel(b) - getCataLevel(a))[0]
+                const profiles = Object.values(data["profiles"])
+                const profile = profiles.find(profile => profile.selected)
 
-                this.dungeons.secrets = profile["dungeons"]["secrets_found"]
+                this.dungeons.profileSecrets = profile["dungeons"]["secrets_found"]
+                this.dungeons.secrets = profiles.map(profile => profile?.["dungeons"]?.["secrets_found"] || 0).reduce((a, b) => a + b, 0)
                 this.dungeons.catalevel = profile["dungeons"]["catacombs"]["level"]["uncappedLevel"]
                 this.dungeons.runs =  profile["dungeons"]["floor_completions"]
 

@@ -1,7 +1,7 @@
 {
     "name": "sbd",
     "description": "Skyblock Dungeon Mod",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "author": "Evankhell0",
     "entry": "index.js",
     "requires": [

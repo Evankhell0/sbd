@@ -13,27 +13,59 @@ const autokick = register("chat", (username, dungeonClass, classLevel) => {
     const player = Data.players[username]
     if(player.uuid == null) {
         player.init().then(() => {
-            checkAndKick(player);
+            checkAndKick(player)
         })
     } else {
-        checkAndKick(player);
+        checkAndKick(player)
     }
-}).setCriteria(/&dParty Finder &r&f> &r&\w(\w+) &r&ejoined the dungeon group! \(&r&b(\w+) Level (\w+)&r&e\)&r/);
+}).setCriteria(/&dParty Finder &r&f> &r&\w(\w+) &r&ejoined the dungeon group! \(&r&b(\w+) Level (\w+)&r&e\)&r/)
 
 const checkAndKick = (player) => {
     const pb = getRawPB(Config.selectedfloor, player)
     const requiredPB = getRequiredPB()
+
+    const secrets = player.dungeons.secrets
+    const requiredSecrets = getRequiredSecrets()
+
     ChatLib.chat(player.toString(Config.selectedfloor, timeToString(pb)))
     if(pb && requiredPB && pb > requiredPB) {
-        ChatLib.chat(`§8[§eSBD§8]§r Kicking ${player.name} (PB: §e${timeToString(pb)}§r | Req: §e${timeToString(requiredPB)}§r)`)
-        if(Config.kickmessage) {
-            Data.staggerChatMessage(() => {
-                ChatLib.command(`pc [SBD] Kicking ${player.name} (PB: ${timeToString(pb)} | Req: ${timeToString(requiredPB)})`)
-            })
-        }
+        kickPlayer("pb", player.name, pb, requiredPB)
+    } else if(secrets && requiredSecrets && secrets < requiredSecrets) {
+        kickPlayer("secrets", player.name, secrets, requiredSecrets)
+    }
+}
+
+const kickPlayer = (type, name, stat, statRequirement) => {
+    ChatLib.chat(getKickPrivateMessage(type, name, stat, statRequirement))
+    if(Config.kickmessage) {
         Data.staggerChatMessage(() => {
-            ChatLib.command(`party kick ${player.name}`)
+            ChatLib.command(getKickChatMessage(type, name, stat, statRequirement))
         })
+    }
+    Data.staggerChatMessage(() => {
+        ChatLib.command(`party kick ${name}`)
+    })
+}
+
+const getKickChatMessage = (type, name, stat, statRequirement) => {
+    switch(type) {
+        case "pb":
+            return `pc [SBD] Kicking ${name} (PB: ${timeToString(stat)} | Req: ${timeToString(statRequirement)})`
+        case "secrets":
+            return `pc [SBD] Kicking ${name} (Secrets: ${stat} | Req: ${statRequirement})`
+        default:
+            return `pc [SBD] Kicking ${name}`
+    }
+}
+
+const getKickPrivateMessage = (type, name, stat, statRequirement) => {
+    switch(type) {
+        case "pb":
+            return `§8[§eSBD§8]§r Kicking ${name} (PB: §e${timeToString(stat)}§r | Req: §e${timeToString(statRequirement)}§r)`
+        case "secrets":
+            return `§8[§eSBD§8]§r Kicking ${name} (Secrets: §e${stat}§r | Req: §e${statRequirement}§r)`
+        default:
+            return `§8[§eSBD§8]§r Kicking ${name} (Error: Unknown Reason)`
     }
 }
 
@@ -55,7 +87,7 @@ const getRawPB = (selectedfloor, player) => {
 }
 
 const getRequiredPB = () => {
-    requiredPB = Config.requiredPB;
+    requiredPB = Config.requiredPB
     if(requiredPB == parseInt(requiredPB)) {
         return parseInt(requiredPB) * 1000
     }
@@ -63,6 +95,19 @@ const getRequiredPB = () => {
         const split = requiredPB.split(":")
         const ms = (parseInt(split[0]) * 60 + parseInt(split[1])) * 1000
         return ms
+    }
+    return null
+}
+
+const getRequiredSecrets = () => {
+    requiredSecrets = Config.requiredSecrets
+    if(requiredSecrets == parseInt(requiredSecrets)) {
+        return parseInt(requiredSecrets)
+    }
+    if(/^\d+k$/.test(requiredSecrets)) {
+        const rawNr = requiredSecrets.replace("k", "")
+        const nr = parseInt(rawNr) * 1000
+        return nr
     }
     return null
 }

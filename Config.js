@@ -100,6 +100,15 @@ class Config {
     })
     requiredPB = "";
 
+    @TextProperty({
+        name: 'Required Secrets',
+        description: 'Required secrets (across all profiles). Leave empty for no requirement.',
+        category: 'Dungeons',
+        subcategory: 'Autokick',
+        placeholder: "no req"
+    })
+    requiredSecrets = "";
+
     @SwitchProperty({
         name: 'Send kick message',
         description: 'Sends a message in party chat before kicking.',
@@ -117,7 +126,9 @@ class Config {
         this.addDependency("Show secret average", "Party Finder Stats")
         this.addDependency("Show S+ PB", "Party Finder Stats")
 
+        this.addDependency("Selected Floor", "Autokick")
         this.addDependency("Required S+ PB", "Autokick")
+        this.addDependency("Required Secrets", "Autokick")
         this.addDependency("Send kick message", "Autokick")
     }
 }

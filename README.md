@@ -14,9 +14,9 @@ Run the command `/ct import sbd` ingame. Requires ChatTriggers to be installed.
 <details>
 <summary>Party Finder Autokick</summary>
     
-* automatically kick joining players by their PB
-* set required S+ PB (in seconds)
-* specify floor (F7, M4-M7)
+* automatically kick joining players by their PB or secrets
+* specify required S+ PB (in seconds) and the floor to be checked
+* specify required secret count
 </details>
 <details>
 <summary>Show Missing Classes</summary>

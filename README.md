@@ -21,7 +21,7 @@ Run the command `/ct import sbd` ingame. Requires ChatTriggers to be installed.
 <details>
 <summary>Show Missing Classes</summary>
     
-* shows missing classes in M4/M6/M7 party finder
+* shows missing classes in party finder
 </details>
 
 ## Commands

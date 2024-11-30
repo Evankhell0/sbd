@@ -18,7 +18,7 @@ const registerPartyFinderTriggers = () => {
         const dungeonType = getDungeonType(lore)
         let hasChanged = false
 
-        if(Config.missingclasses && dungeonType == "master_catacombs" && [4, 6, 7].includes(floor) && !hasMissingClasses(lore)) {
+        if(Config.missingclasses && !hasMissingClasses(lore)) {
             const missingClasses = getMissingClasses(lore)
             lore.push(`§e§lMissing:§r§f ${missingClasses.join(", ")}`)
             item.setLore(lore)

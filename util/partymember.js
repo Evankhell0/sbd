@@ -4,6 +4,7 @@ import { calcSkillLevel } from "BloomCore/utils/Utils"
 import Data from "../util/data.js"
 import { timeToString, indexToFloor } from "../util/calc.js"
 import { handleError } from "../util/error.js"
+import { requestUUID, requestStats } from "../util/requests.js"
 
 export default class PartyMember {
     constructor(name) {
@@ -18,14 +19,13 @@ export default class PartyMember {
     }
 
     init() {
-        return request({url: `https://api.mojang.com/users/profiles/minecraft/${this.name}`, json: true}).then(data => {
-            this.uuid = data.id
+        return requestUUID(this.name).then(uuid => {
+            if(!uuid) {
+                handleError(`Failed to fetch valid UUID for ${this.name}`)
+                return
+            }
+            this.uuid = uuid
             return this.updateDungeonStats()
-        }).catch(() => {
-            request({url: `https://api.ashcon.app/mojang/v2/user/${this.name}`, json: true}).then(data => {
-                this.uuid = data.uuid.replace("-", "")
-                return this.updateDungeonStats()
-            }).catch(e => handleError(`Could not find uuid for ${this.name}`, e.reason))
         })
     }
 

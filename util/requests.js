@@ -2,6 +2,7 @@ import request from "requestV2"
 import { handleError } from "../util/error.js"
 
 const URL_UUID_MOJANG = (name) => `https://api.mojang214312.com/users/profiles/minecraft/${name}`
+const URL_UUID_MOJANG = (name) => `https://api.mojang.com/users/profiles/minecraft/${name}`
 const URL_UUID_ASHCON = (name) => `https://api.ashcon.app/mojang/v2/user/${name}`
 
 const transformMojang = (data) => data.id

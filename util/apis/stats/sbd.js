@@ -1,6 +1,7 @@
 import { calcSkillLevel } from "BloomCore/utils/Utils"
 
-const urlFunc = (uuid) => `https://sbd.evankhell.workers.dev/player/${uuid}`
+const urlFuncCf = (uuid) => `https://sbd.evankhell.workers.dev/player/${uuid}`
+const urlFuncAz = (uuid) => `http://sbd.hs.vc/player/${uuid}`
 
 const transformFunc = (data) => {
     const obj = {
@@ -12,6 +13,7 @@ const transformFunc = (data) => {
     return obj
 }
 
-const statsSBD = { urlFunc, transformFunc }
+const statsSbdCf = { urlFunc: urlFuncCf, transformFunc }
+const statsSbdAz = { urlFunc: urlFuncAz, transformFunc }
 
-module.exports = { statsSBD }
+module.exports = { statsSbdCf, statsSbdAz }

@@ -1,7 +1,4 @@
-import request from "requestV2"
-import { calcSkillLevel } from "BloomCore/utils/Utils"
-
-import { timeToString, indexToFloor } from "../util/calc.js"
+import { indexToFloor } from "../util/calc.js"
 import { handleError } from "../util/error.js"
 import { requestUUID, requestStats } from "../util/requests.js"
 

@@ -1,16 +1,8 @@
 import request from "requestV2"
-import { handleError } from "../util/error.js"
 
-const URL_UUID_MOJANG = (name) => `https://api.mojang.com/users/profiles/minecraft/${name}`
-const URL_UUID_ASHCON = (name) => `https://api.ashcon.app/mojang/v2/user/${name}`
-
-const transformMojang = (data) => data.id
-const transformAshcon = (data) => data.uuid.replace(/-/g, "")
-
-const apis = [
-    { urlFunc: URL_UUID_MOJANG, transformFunc: transformMojang },
-    { urlFunc: URL_UUID_ASHCON, transformFunc: transformAshcon },
-]
+import Data from "./data.js"
+import { uuidApis, statsApis } from "./apis.js"
+import { handleError } from "./error.js"
 
 const requestAndTransformData = (url, func, headers = { 'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json' }) => {
     return request({url: url, headers: headers, json: true}).then(data => {
@@ -18,29 +10,30 @@ const requestAndTransformData = (url, func, headers = { 'User-Agent': ' Mozilla/
     })
 }
 
-const requestUUIDDynamic = (name, apiList) => {
+const requestDataDynamic = (value, apiList) => {
     const tryAPIs = (index) => {
         if(index >= apiList.length) {
-            handleError(`Could not get UUID for ${name}`)
+            handleError(`Could not get Data for ${value}`)
             return null
         }
 
         const { urlFunc, transformFunc } = apiList[index]
-        return requestAndTransformData(urlFunc(name), transformFunc)
-            .catch((e) => {
-                return tryAPIs(index + 1)
-            })
+        return requestAndTransformData(urlFunc(value), transformFunc).catch((e) => {
+            return tryAPIs(index + 1)
+        })
     };
 
     return tryAPIs(0)
 }
 
 const requestUUID = (name) => {
-    return requestUUIDDynamic(name, apis)
-        .catch(e => console.log(e))
+    return requestDataDynamic(name, uuidApis)
+        .catch(e => handleError("Failed to get UUID", e))
 }
 
 const requestStats = (uuid) => {
-
+    return requestDataDynamic(uuid, statsApis)
+        .catch(e => handleError("Failed to get Dungeon Stats", e))
 }
+
 module.exports = { requestUUID, requestStats }

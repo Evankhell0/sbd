@@ -23,7 +23,7 @@ export default class Data {
             this.requests[index].request().then(() => {
                 this.requests.splice(index, 1)
                 this.processNextRequest()
-            }).catch(e => console.log(e))
+            }).catch(e => console.log(JSON.stringify(e)))
         }
     }
 

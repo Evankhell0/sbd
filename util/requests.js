@@ -5,7 +5,7 @@ import { uuidApis, statsApis } from "./apis/apis.js"
 import { handleError } from "./error.js"
 
 const requestAndTransformData = (url, func, headers = { 'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json' }) => {
-    return request({url: url, headers: headers, json: true}).then(data => {
+    return request({url: url, headers: headers, json: true, connectTimeout: 5000}).then(data => {
         return func(data)
     })
 }

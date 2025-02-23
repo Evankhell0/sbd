@@ -48,6 +48,6 @@ const getFloorPB = (profile, type, floor) => {
     return pb
 }
 
-const statsSkyCrypt = { urlFunc, transformFunc, stagger: true }
+const statsSkyCrypt = { urlFunc, transformFunc, stagger: true, key: "sky" }
 
 module.exports = { statsSkyCrypt }

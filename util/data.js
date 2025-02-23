@@ -6,6 +6,11 @@ export default class Data {
         lastMessage: 0,
         timeout: 400
     }
+    static debug = {
+        req: {
+            fail: 0
+        }
+    }
 
     // only allow 2 simultaneous calls to SkyCrypt API
     static staggerRequest(request) {

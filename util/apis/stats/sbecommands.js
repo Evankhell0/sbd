@@ -47,6 +47,6 @@ const getRunCount = (catacombs) => {
     return runCount
 }
 
-const statsSBE = { urlFunc, transformFunc, key: "sbe" }
+const statsSBE = { urlFunc, transformFunc, key: "stats-sbe" }
 
 module.exports = { statsSBE }

@@ -13,7 +13,7 @@ const transformFunc = (data) => {
     return obj
 }
 
-const statsSbdCf = { urlFunc: urlFuncCf, transformFunc, key: "sbd-cf" }
-const statsSbdAz = { urlFunc: urlFuncAz, transformFunc, key: "sbd-az" }
+const statsSbdCf = { urlFunc: urlFuncCf, transformFunc, key: "stats-sbd-cf" }
+const statsSbdAz = { urlFunc: urlFuncAz, transformFunc, key: "stats-sbd-az" }
 
 module.exports = { statsSbdCf, statsSbdAz }

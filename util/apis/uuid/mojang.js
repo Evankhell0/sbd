@@ -4,6 +4,6 @@ const transformFunc = (data) => {
     return data.id
 }
 
-const uuidMojang = { urlFunc, transformFunc }
+const uuidMojang = { urlFunc, transformFunc, key: "uuid-mojang" }
 
 module.exports = { uuidMojang }

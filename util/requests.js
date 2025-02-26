@@ -14,10 +14,18 @@ const requestDataDynamic = (value, apiList) => {
     const tryAPIs = (index) => {
         if(index >= apiList.length) {
             handleError(`Could not get Data for ${value}`)
+            Data.debug.req["fail"]++;
             return null
         }
 
-        const { urlFunc, transformFunc } = apiList[index]
+        const { urlFunc, transformFunc, key } = apiList[index]
+
+        if(Data.debug.req[key]) {
+            Data.debug.req[key]++
+        } else {
+            Data.debug.req[key] = 1
+        }
+
         return requestAndTransformData(urlFunc(value), transformFunc).catch((e) => {
             return tryAPIs(index + 1)
         })

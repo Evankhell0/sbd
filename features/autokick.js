@@ -28,7 +28,7 @@ const checkAndKick = (player) => {
     const requiredSecrets = getRequiredSecrets()
 
     ChatLib.chat(player.toString(Config.selectedfloor, timeToString(pb)))
-    if(pb && requiredPB && pb > requiredPB) {
+    if((pb && requiredPB && pb > requiredPB) || (requiredPB && noSPlus(pb, player))) {
         kickPlayer("pb", player.name, pb, requiredPB)
     } else if(secrets && requiredSecrets && secrets < requiredSecrets) {
         kickPlayer("secrets", player.name, secrets, requiredSecrets)
@@ -110,6 +110,10 @@ const getRequiredSecrets = () => {
         return nr
     }
     return null
+}
+
+const noSPlus = (pb, player) => {
+    return pb == null && player.dungeons.cataxp && player.dungeons.secrets && player.dungeons.runs
 }
 
 module.exports = { autokick }

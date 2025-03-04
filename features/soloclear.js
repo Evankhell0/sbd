@@ -63,7 +63,9 @@ const saveSoloClear = () => {
         crypts: Dungeon.crypts,
         completedPuzzles: Dungeon.completedPuzzles,
         puzzles: Dungeon.puzzles,
-        seconds: Dungeon.seconds
+        seconds: Dungeon.seconds,
+        mimicKilled: Dungeon.mimicKilled,
+        date: Date.now()
     }
     if(!pogData.soloClears[Dungeon.floor]) {
         pogData.soloClears[Dungeon.floor] = []
@@ -73,5 +75,5 @@ const saveSoloClear = () => {
 }
 
 const formatSoloClear = (data, rank = 0) => {
-    return `§e#${rank}§r: §9${timeToString(data.seconds)}§r | §9${data.secretsFound}§r/$§9{data.totalSecrets}§r | §9${data.completedPuzzles}§rP | §9${data.crypts}§rc`
+    return `§8[§e#${rank}§8]§r §b${timeToString(data.seconds * 1000)}§r | §a${data.secretsFound}§r/§a${data.totalSecrets}§r | §a${data.completedPuzzles}P§r | §a${data.crypts}c§r`
 }

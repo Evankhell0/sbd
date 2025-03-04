@@ -7,6 +7,7 @@
     "requires": [
         "requestV2",
         "Vigilance",
-        "BloomCore"
+        "BloomCore",
+        "PogData"
     ]
 }

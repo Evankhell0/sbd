@@ -17,7 +17,7 @@ export const registerSoloClearTriggers = () => {
         const dungeonScore = Dungeon.isPaul ? Dungeon.score - 10 : Dungeon.score
         if(!finishedClear && dungeonScore >= 300 && Dungeon.partySize == 0) {
             finishedClear = true
-            ChatLib.chat(`§8[§eSBD§8]§r Reached 300 score in §b${Dungeon.seconds}s§r`)
+            ChatLib.chat(`§8[§eSBD§8]§r Reached 300 score in §b${Dungeon.seconds}s§r (§e${Dungeon.floor}§r)`)
             saveSoloClear()
         }
     })
@@ -42,9 +42,10 @@ export const registerSoloClearTriggers = () => {
         ChatLib.chat("mimicKilled: " + Dungeon.mimicKilled)
     }).setName("dst")
 
-    register("command", (amount = 5) => {
-        const sorted = pogData.soloClears["F7"].sort((a, b) => a.seconds - b.seconds)
-        ChatLib.chat(`§8[§eSBD§8]§r Top Solo Clears (§eF7§r):`)
+    register("command", (floor = "F7", amount = 5) => {
+        const floorUpper = floor.toUpperCase()
+        const sorted = pogData.soloClears[floorUpper]?.sort((a, b) => a.seconds - b.seconds) ?? []
+        ChatLib.chat(`§8[§eSBD§8]§r Top Solo Clears (§e${floorUpper}§r):`)
         for(let i = 0; i < amount; i++) {
             if(sorted[i]) {
                 ChatLib.chat(formatSoloClear(sorted[i], i+1))
@@ -52,15 +53,16 @@ export const registerSoloClearTriggers = () => {
         }
     }).setName("topsoloclears")
 
-    register("command", () => {
-        const sorted = pogData.soloClears["F7"].sort((a, b) => a.seconds - b.seconds)
-        ChatLib.chat(`§8[§eSBD§8]§r Solo Clear Stats (§eF7§r):`)
-        ChatLib.chat(`  §7➜§r Fastest Clear: §b${sorted.length ? timeToString(sorted[0]?.seconds * 1000) : "n/a"}`)
-        ChatLib.chat(`  §7➜§r Total Clears: §a${sorted.length}`)
+    register("command", (floor = "F7") => {
+        const floorUpper = floor.toUpperCase()
+        const sorted = pogData.soloClears[floorUpper]?.sort((a, b) => a.seconds - b.seconds) ?? []
+        ChatLib.chat(`§8[§eSBD§8]§r Solo Clear Stats (§e${floorUpper}§r):`)
+        ChatLib.chat(` §7➜§r Fastest Clear: §b${sorted.length ? timeToString(sorted[0]?.seconds * 1000) : "n/a"}`)
+        ChatLib.chat(` §7➜§r Total Clears: §a${sorted.length}`)
         if(sorted.length) {
             for(let i = 1; i < 4; i++) {
                 const multi = Math.floor(sorted[0]?.seconds / 60) + i
-                ChatLib.chat(`  §7➜§r Sub ${multi} Clears: §a${sorted.filter(x => x.seconds < 60 * multi).length}`)
+                ChatLib.chat(` §7➜§r Sub ${multi} Clears: §a${sorted.filter(x => x.seconds < 60 * multi).length}`)
             }
         }
     }).setName("soloclearstats")

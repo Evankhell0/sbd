@@ -11,7 +11,7 @@ const pogData = new PogObject("sbd", {
 
 export const registerSoloClearTriggers = () => {
     register("tick", () => {
-        if(!Dungeon.inDungeon) {
+        if(!Dungeon.inDungeon || !Config.tracksoloclears) {
             return
         }
         const dungeonScore = Dungeon.isPaul ? Dungeon.score - 10 : Dungeon.score
@@ -25,22 +25,6 @@ export const registerSoloClearTriggers = () => {
     register("worldLoad", () => {
         finishedClear = false
     })
-
-    register("command", () => {
-        ChatLib.chat("inDungeon: " + Dungeon.inDungeon)
-        ChatLib.chat("score: " + Dungeon.score)
-        ChatLib.chat("secretsFound: " + Dungeon.secretsFound)
-        ChatLib.chat("totalSecrets: " + Dungeon.totalSecrets)
-        ChatLib.chat("crypts: " + Dungeon.crypts)
-        ChatLib.chat("completedPuzzles: " + Dungeon.completedPuzzles)
-        ChatLib.chat("puzzles: " + Dungeon.puzzles)
-        ChatLib.chat("seconds: " + Dungeon.seconds)
-        ChatLib.chat("partySize: " + Dungeon.partySize)
-        ChatLib.chat("floor: " + Dungeon.floor)
-        ChatLib.chat("floorNumber: " + Dungeon.floorNumber)
-        ChatLib.chat("dungeonType: " + Dungeon.dungeonType)
-        ChatLib.chat("mimicKilled: " + Dungeon.mimicKilled)
-    }).setName("dst")
 
     register("command", (floor = "F7", amount = 5) => {
         const floorUpper = floor.toUpperCase()

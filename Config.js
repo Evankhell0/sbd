@@ -128,6 +128,13 @@ class Config {
     constructor() {
         this.initialize(this);
 
+        this.setCategoryDescription("Solo Clears",
+            `
+            Commands:
+            &e/topsoloclears <floor> <amount> &r- Shows your top solo clear times.
+            &e/soloclearstats <floor> &r- Shows your solo clear stats.
+        `)
+
         this.addDependency("Show class level", "Party Finder Stats")
         this.addDependency("Show total secrets", "Party Finder Stats")
         this.addDependency("Show cata level", "Party Finder Stats")

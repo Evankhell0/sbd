@@ -26,7 +26,7 @@ Run the command `/ct import sbd` ingame. Requires ChatTriggers to be installed.
 <details>
 <summary>Solo Clear Tracker</summary>
 
-* track all of you solo clear times
+* track all of your solo clear times
 * show stats of your clears
 </details>
 

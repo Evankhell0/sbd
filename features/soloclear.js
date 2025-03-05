@@ -14,9 +14,10 @@ export const registerSoloClearTriggers = () => {
         if(!Dungeon.inDungeon) {
             return
         }
-        if(!finishedClear && Dungeon.score >= 300 && Dungeon.partySize == 0) {
+        const dungeonScore = Dungeon.isPaul ? Dungeon.score - 10 : Dungeon.score
+        if(!finishedClear && dungeonScore >= 300 && Dungeon.partySize == 0) {
             finishedClear = true
-            ChatLib.chat(`§8[§eSBD§8]§r Reached 300 score in §e${Dungeon.seconds}§rs`)
+            ChatLib.chat(`§8[§eSBD§8]§r Reached 300 score in §b${Dungeon.seconds}s§r`)
             saveSoloClear()
         }
     })
@@ -25,7 +26,7 @@ export const registerSoloClearTriggers = () => {
         finishedClear = false
     })
 
-    register("command", (args) => {
+    register("command", () => {
         ChatLib.chat("inDungeon: " + Dungeon.inDungeon)
         ChatLib.chat("score: " + Dungeon.score)
         ChatLib.chat("secretsFound: " + Dungeon.secretsFound)
@@ -38,22 +39,31 @@ export const registerSoloClearTriggers = () => {
         ChatLib.chat("floor: " + Dungeon.floor)
         ChatLib.chat("floorNumber: " + Dungeon.floorNumber)
         ChatLib.chat("dungeonType: " + Dungeon.dungeonType)
+        ChatLib.chat("mimicKilled: " + Dungeon.mimicKilled)
     }).setName("dst")
 
-    register("command", (args) => {
-        console.log(JSON.stringify(pogData, null, 2))
-        ChatLib.chat(JSON.stringify(pogData, null, 2))
-    }).setName("soloclears")
-
-    register("command", (args) => {
-        const sorted = pogData.soloClears["F7"].sort((a, b) => b.seconds - a.seconds)
-        ChatLib.chat(`§8[§eSBD§8]§r Top Solo Clears (F7):`)
-        for(let i = 0; i < 5; i++) {
+    register("command", (amount = 5) => {
+        const sorted = pogData.soloClears["F7"].sort((a, b) => a.seconds - b.seconds)
+        ChatLib.chat(`§8[§eSBD§8]§r Top Solo Clears (§eF7§r):`)
+        for(let i = 0; i < amount; i++) {
             if(sorted[i]) {
                 ChatLib.chat(formatSoloClear(sorted[i], i+1))
             }
         }
     }).setName("topsoloclears")
+
+    register("command", () => {
+        const sorted = pogData.soloClears["F7"].sort((a, b) => a.seconds - b.seconds)
+        ChatLib.chat(`§8[§eSBD§8]§r Solo Clear Stats (§eF7§r):`)
+        ChatLib.chat(`  §7➜§r Fastest Clear: §b${sorted.length ? timeToString(sorted[0]?.seconds * 1000) : "n/a"}`)
+        ChatLib.chat(`  §7➜§r Total Clears: §a${sorted.length}`)
+        if(sorted.length) {
+            for(let i = 1; i < 4; i++) {
+                const multi = Math.floor(sorted[0]?.seconds / 60) + i
+                ChatLib.chat(`  §7➜§r Sub ${multi} Clears: §a${sorted.filter(x => x.seconds < 60 * multi).length}`)
+            }
+        }
+    }).setName("soloclearstats")
 }
 
 const saveSoloClear = () => {
@@ -65,6 +75,7 @@ const saveSoloClear = () => {
         puzzles: Dungeon.puzzles,
         seconds: Dungeon.seconds,
         mimicKilled: Dungeon.mimicKilled,
+        isPaul: Dungeon.isPaul,
         date: Date.now()
     }
     if(!pogData.soloClears[Dungeon.floor]) {
@@ -75,5 +86,5 @@ const saveSoloClear = () => {
 }
 
 const formatSoloClear = (data, rank = 0) => {
-    return `§8[§e#${rank}§8]§r §b${timeToString(data.seconds * 1000)}§r | §a${data.secretsFound}§r/§a${data.totalSecrets}§r | §a${data.completedPuzzles}P§r | §a${data.crypts}c§r`
+    return `§8[§e#${rank}§8]§r §b${timeToString(data.seconds * 1000)}§r | §a${data.secretsFound}§r/§a${data.totalSecrets}§r | §d${data.completedPuzzles}P§r | §a${data.crypts}c§r`
 }

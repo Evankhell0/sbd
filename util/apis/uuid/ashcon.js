@@ -4,6 +4,6 @@ const transformFunc = (data) => {
     return data.uuid.replace(/-/g, "")
 }
 
-const uuidAshcon = { urlFunc, transformFunc }
+const uuidAshcon = { urlFunc, transformFunc, key: "uuid-ash" }
 
 module.exports = { uuidAshcon }

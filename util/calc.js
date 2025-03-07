@@ -25,4 +25,8 @@ const indexToFloor = (index) => {
     }
 }
 
-module.exports = { timeToString, indexToFloor }
+const yn = (bool) => {
+    return bool ? "Yes" : "No"
+}
+
+module.exports = { timeToString, indexToFloor, yn }

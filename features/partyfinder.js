@@ -101,11 +101,11 @@ const createSuffix = (msg, player, floor, dungeonType) => {
 const getFloor = (lore) => {
     const floorLine = lore.find(x => /§7Floor: §bFloor /.test(x))
     if(floorLine) {
-        let floor = floorLine.split(" ").pop()
+        const floor = floorLine.split(" ").pop()
         if(floor != parseInt(floor)) {
-            floor = decodeNumeral(floor)
+            return decodeNumeral(floor)
         }
-        return floor
+        return parseInt(floor)
     }
     return 0
 }

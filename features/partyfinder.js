@@ -24,7 +24,7 @@ const registerPartyFinderTriggers = () => {
             item.setLore(lore)
         }
 
-        if(!Config.partyfinder) {
+        if(!Config.partyfinder || !isPartyFinderTooltip(itemName)) {
             return
         }
         lore = lore.map(x => {

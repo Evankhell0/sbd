@@ -62,11 +62,19 @@ class Config {
 
     @SwitchProperty({
         name: 'Show missing classes',
-        description: 'Displays missing classes in M4/M6/M7 party finder.',
+        description: 'Displays missing classes party finder.',
         category: 'Party Finder',
         subcategory: 'Overlay',
     })
     missingclasses = false;
+
+    @SwitchProperty({
+        name: 'Highlight selected class',
+        description: 'Highlight your own class in missing classes',
+        category: 'Party Finder',
+        subcategory: 'Overlay',
+    })
+    highlightClass = true;
 
     @SwitchProperty({
         name: 'Autokick',
@@ -140,6 +148,8 @@ class Config {
         this.addDependency("Show cata level", "Party Finder Stats")
         this.addDependency("Show secret average", "Party Finder Stats")
         this.addDependency("Show S+ PB", "Party Finder Stats")
+
+        this.addDependency("Highlight selected class", "Show missing classes")
 
         this.addDependency("Selected Floor", "Autokick")
         this.addDependency("Required S+ PB", "Autokick")

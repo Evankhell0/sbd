@@ -18,13 +18,13 @@ const registerPartyFinderTriggers = () => {
         const dungeonType = getDungeonType(lore)
         let hasChanged = false
 
-        if(Config.missingclasses && dungeonType == "master_catacombs" && [4, 6, 7].includes(floor) && !hasMissingClasses(lore)) {
+        if(Config.missingclasses && isPartyFinderTooltip(itemName) && !hasMissingClasses(lore)) {
             const missingClasses = getMissingClasses(lore)
-            lore.push(`§e§lMissing:§r§f ${missingClasses.join(", ")}`)
+            lore.push(createMissingClassesString(missingClasses))
             item.setLore(lore)
         }
 
-        if(!Config.partyfinder) {
+        if(!Config.partyfinder || !isPartyFinderTooltip(itemName)) {
             return
         }
         lore = lore.map(x => {
@@ -52,7 +52,44 @@ const registerPartyFinderTriggers = () => {
         if(hasChanged) {
             item.setLore(lore)
         }
-    });
+    })
+
+    register("guiRender", (mouseX, mouseY, gui) => {
+        const inv = Player.getOpenedInventory()
+        if(!inv || inv?.getName() != "Catacombs Gate") {
+          return
+        }
+
+        const slot = inv?.getStackInSlot(45)
+        const itemName = slot?.getName()
+        const lore = slot?.getLore()
+
+        if(!isDungeonClassTooltip(itemName)) {
+          return
+        }
+
+        Data.class = getDungeonClass(lore)
+    })
+}
+
+const isPartyFinderTooltip = (line) => {
+  return /(§\w)*\w+'s Party§r/.test(line)
+}
+
+const isDungeonClassTooltip = (line) => {
+  return /§\wDungeon Classes/.test(line)
+}
+
+const getDungeonClass = (lore) => {
+  const classRegex = /§\wCurrently Selected: §\w(\w+)/
+  return lore.find(x => classRegex.test(x)).match(classRegex)?.[1]
+}
+
+const createMissingClassesString = (missingClasses) => {
+  if(!Config.highlightClass) {
+    return `§e§lMissing:§r§f ${missingClasses.join(", ")}`
+  }
+  return `§e§lMissing:§r§f ${missingClasses.map(x => x == Data.class ? "§6" + x + "§r" : x).join(", ")}`
 }
 
 const hasMissingClasses = (lore) => {
@@ -101,11 +138,11 @@ const createSuffix = (msg, player, floor, dungeonType) => {
 const getFloor = (lore) => {
     const floorLine = lore.find(x => /§7Floor: §bFloor /.test(x))
     if(floorLine) {
-        let floor = floorLine.split(" ").pop()
+        const floor = floorLine.split(" ").pop()
         if(floor != parseInt(floor)) {
-            floor = decodeNumeral(floor)
+            return decodeNumeral(floor)
         }
-        return floor
+        return parseInt(floor)
     }
     return 0
 }

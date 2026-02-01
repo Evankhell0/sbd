@@ -32,5 +32,3 @@ Run the command `/ct import sbd` ingame. Requires ChatTriggers to be installed.
 
 ## Commands
 - `/sbd` Opens the SBD config.
-- `/topsoloclears <floor> <amount>` Shows your top solo clear times
-- `/soloclearstats <floor>` Shows your solo clear stats

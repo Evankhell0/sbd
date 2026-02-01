@@ -18,7 +18,7 @@ const autokick = register("chat", (username, dungeonClass, classLevel) => {
     } else {
         checkAndKick(player)
     }
-}).setCriteria(/&dParty Finder &r&f> &r&\w(\w+) &r&ejoined the dungeon group! \(&r&b(\w+) Level (\w+)&r&e\)&r/)
+}).setCriteria(/Party Finder > (\w+) joined the dungeon group! \((\w+) Level (\w+)\)/)
 
 const checkAndKick = (player) => {
     const pb = getRawPB(Config.selectedfloor, player)

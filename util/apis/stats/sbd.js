@@ -1,4 +1,4 @@
-import { calcSkillLevel } from "BloomCore/utils/Utils"
+import { calcSkillLevel } from "../../calc.js"
 
 const urlFuncCf = (uuid) => `https://sbd.evankhell.workers.dev/player/${uuid}`
 const urlFuncAz = (uuid) => `http://sbd.hs.vc/player/${uuid}`
@@ -8,7 +8,7 @@ const transformFunc = (data) => {
         dungeons: data.dungeons
     }
 
-    obj.dungeons.catalevel = Math.floor(calcSkillLevel("catacombs", data.dungeons.cataxp))
+    obj.dungeons.catalevel = Math.floor(calcSkillLevel(data.dungeons.cataxp))
 
     return obj
 }

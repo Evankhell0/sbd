@@ -60,7 +60,7 @@ class Config {
     })
     partyfinderF7PB = true;
 
-    @SwitchProperty({
+    /*@SwitchProperty({
         name: 'Show missing classes',
         description: 'Displays missing classes party finder.',
         category: 'Party Finder',
@@ -74,7 +74,7 @@ class Config {
         category: 'Party Finder',
         subcategory: 'Overlay',
     })
-    highlightClass = true;
+    highlightClass = true;*/
 
     @SwitchProperty({
         name: 'Autokick',
@@ -125,23 +125,8 @@ class Config {
     })
     kickmessage = false;
 
-    @SwitchProperty({
-        name: 'Track Solo Clears',
-        description: 'Track all of your solo clear times.',
-        category: 'Solo Clears',
-        subcategory: 'Solo Clears',
-    })
-    tracksoloclears = true;
-
     constructor() {
         this.initialize(this);
-
-        this.setCategoryDescription("Solo Clears",
-            `
-            Commands:
-            &e/topsoloclears <floor> <amount> &r- Shows your top solo clear times.
-            &e/soloclearstats <floor> &r- Shows your solo clear stats.
-        `)
 
         this.addDependency("Show class level", "Party Finder Stats")
         this.addDependency("Show total secrets", "Party Finder Stats")
@@ -149,7 +134,7 @@ class Config {
         this.addDependency("Show secret average", "Party Finder Stats")
         this.addDependency("Show S+ PB", "Party Finder Stats")
 
-        this.addDependency("Highlight selected class", "Show missing classes")
+        //this.addDependency("Highlight selected class", "Show missing classes")
 
         this.addDependency("Selected Floor", "Autokick")
         this.addDependency("Required S+ PB", "Autokick")

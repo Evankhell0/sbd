@@ -12,6 +12,7 @@ export default class PartyMember {
                 master_catacombs: {}
             }
         }
+        this.init()
     }
 
     init() {
@@ -29,7 +30,7 @@ export default class PartyMember {
                 this.updateSecretAverage()
                 this.changed = true
             }).catch()
-        }).catch(e=>console.log(e))
+        }).catch(e => console.log(e))
     }
 
     updateSecretAverage() {

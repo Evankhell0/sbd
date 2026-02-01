@@ -2,7 +2,7 @@
 Skyblock Dungeon Mod made with ChatTriggers. Created by DUNGEONSDUNGEONS.
 
 ## Installation
-Run the command `/ct import sbd` ingame. Requires ChatTriggers to be installed.
+Run the command `/ct import sbd` ingame. Requires ChatTriggers to be installed. There are versions for both 1.8 and 1.21.
 
 ## Features
 <details>
@@ -19,12 +19,12 @@ Run the command `/ct import sbd` ingame. Requires ChatTriggers to be installed.
 * specify required secret count
 </details>
 <details>
-<summary>Show Missing Classes</summary>
+<summary>Show Missing Classes (1.8.9 only)</summary>
 
 * shows missing classes in party finder
 </details>
 <details>
-<summary>Solo Clear Tracker</summary>
+<summary>Solo Clear Tracker (1.8.9 only)</summary>
 
 * track all of your solo clear times
 * show stats of your clears

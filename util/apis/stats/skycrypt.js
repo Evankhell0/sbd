@@ -1,6 +1,6 @@
 import { timeToString } from "../../calc.js"
 
-const urlFunc = (uuid) => `https://sky.shiiyu.moe/api/v2/dungeons/${uuid}`
+const urlFunc = (uuid) => `https://sky.shiiiyu.moe/api/v2/dungeons/${uuid}`
 
 const transformFunc = (data) => {
     const profiles = Object.values(data.profiles)
@@ -22,7 +22,7 @@ const transformFunc = (data) => {
     for(let i = 1; i <= 7; i++) {
         const dungeonTypes = ["catacombs", "master_catacombs"]
         dungeonTypes.forEach(type => {
-            obj.dungeons.pb[type][i] = this.getFloorPB(profile, type, i)
+            obj.dungeons.pb[type][i] = getFloorPB(profile, type, i)
         })
     }
 

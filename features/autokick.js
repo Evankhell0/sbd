@@ -87,7 +87,7 @@ const getRawPB = (selectedfloor, player) => {
 }
 
 const getRequiredPB = () => {
-    requiredPB = Config.requiredPB
+    const requiredPB = Config.requiredPB
     if(requiredPB == parseInt(requiredPB)) {
         return parseInt(requiredPB) * 1000
     }
@@ -100,7 +100,7 @@ const getRequiredPB = () => {
 }
 
 const getRequiredSecrets = () => {
-    requiredSecrets = Config.requiredSecrets
+    const requiredSecrets = Config.requiredSecrets
     if(requiredSecrets == parseInt(requiredSecrets)) {
         return parseInt(requiredSecrets)
     }
